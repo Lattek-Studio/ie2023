@@ -12,6 +12,15 @@ class MyHandler(FileSystemEventHandler):
             funky()
 
 if __name__ == "__main__":
+
+    while True:
+        try:
+            my_id = int(input("Enter ID:\n"))
+            break
+        except ValueError:
+            print("Error: Invalid number")
+            
+
     path_to_watch = os.path.join("simulator","game") 
     event_handler = MyHandler()
 
