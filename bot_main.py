@@ -3,20 +3,40 @@ from watchdog.events import FileSystemEventHandler
 import os
 
 from reader.player import Perseus
+from reader.goals import Goal
+from pathfinding.main import Grid
+
 
 player = Perseus()
-
-
+player.goals.addGoal(Goal("goOffset", {"x": -1, "y": 0}))
+grid = Grid("")
 # function triggered by file creation
+
+
 def funky(read_file_path, tura):
     read_input = open(read_file_path, "r")
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
+    grid.setMap(player.fullMap, player.xSize, player.ySize)
 
+    path = grid.AStarPathfinding({
+        'startX': player.xCoord,
+        'startY': player.yCoord,
+        'endX': player.xCoord - 8,
+        'endY': player.yCoord - 3,
+    })
+
+    if (len(path) > 0):
+        player.goals.removeGoal()
+        print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
+        player.goals.addGoal(Goal("goOffset", {
+                             "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
     print("TURA", tura)
-    player.printFullMap()
-    send_command("u m u", tura)
+    # player.printFullMap()
+
+    message = player.goals.executeGoals()
+    send_command(message, tura)
     read_input.close()
 
 

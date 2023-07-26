@@ -1,3 +1,6 @@
+from reader.goals import Goal, GoalSystem
+
+
 class Perseus:
     tura = 0
     map = ""
@@ -7,7 +10,7 @@ class Perseus:
     homeY = ""
     xCoord = ""
     yCoord = ""
-    tura = 0
+    goals = GoalSystem()
 
     def generateUnknown(self):
         unknown = ""
