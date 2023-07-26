@@ -4,11 +4,18 @@ import os
 
 #function triggered by file creation
 def funky(read_file_path,tura):
-    print(tura, "\n\n\n")
     read_input = open(read_file_path, "r")
     print(read_input.read())
 
-def send_command(move,action,action_m,upgrade,tura):
+    print("TURA", tura)
+
+    send_command("U M U",tura)
+    read_input.close()
+
+def send_command(actions_string,tura):
+    out = open(os.path.join("simulator","game","c{}_{}.txt".format(my_id,tura)), "a")
+    out.write(actions_string)
+    out.close()
     return
 
 class MyHandler(FileSystemEventHandler):
