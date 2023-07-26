@@ -19,6 +19,16 @@ def funky(read_file_path, tura):
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
+
+    # update zone
+
+    currentView = player.map
+    if (map.count("F") and not player.fullMap.count("F")):
+        index = map.index("F")
+        xZone = index % player.xSize
+        yZone = index // player.xSize
+        player.setZone(xZone, yZone)
+
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
