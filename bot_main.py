@@ -20,8 +20,8 @@ def funky(read_file_path, tura):
     input = read_input.read()
     player.addReading(input)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
-    pointGoalX = player.xCoord
-    pointGoalY = player.yCoord
+    pointGoalX = player.xSize // 2
+    pointGoalY = player.ySize // 2
     # spiral magic
     spiral = get_spiral_traj(4, 6, player.homeX, player.homeY)
     filtered = []
@@ -77,10 +77,13 @@ def funky(read_file_path, tura):
                 pointGoalY = oreY
 
         print(indexes_dict)
-
+    buy = ""
     if (player.iron > 0 and player.osmium > 0):
         pointGoalX = player.homeX
         pointGoalY = player.homeY
+        if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
+            buy = " b b"
+
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
@@ -98,7 +101,7 @@ def funky(read_file_path, tura):
     # player.printFullMap()
 
     message = player.goals.executeGoals()
-    send_command(message + " m " + message, tura)
+    send_command(message + " m " + message + buy, tura)
     read_input.close()
 
 
