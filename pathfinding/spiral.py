@@ -12,7 +12,6 @@ def get_spiral_traj(width, spirals, x, y):
         x = 0-width-abs(prx)
         print(prx,x)
         for j in reversed(range(x+1,prx)):
-            print('helo')
             coord_list.append((j+correction_x, y+correction_y))
         coord_list.append((x+correction_x, y+correction_y))
         
@@ -37,5 +36,3 @@ def get_spiral_traj(width, spirals, x, y):
         pry = y
 
     return coord_list
-
-print(get_spiral_traj(4,6,0,0))
