@@ -71,6 +71,8 @@ class Perseus:
                 item = self.fullMap[y * self.xSize + x]
                 print(item, end='')
             print("")
+        print('HOME: ', self.homeX, self.homeY)
+        print('COORDS: ', self.xCoord, self.yCoord)
 
     def setTura(self, tura):
         self.tura = tura
