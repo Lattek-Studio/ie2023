@@ -1,0 +1,3 @@
+Punctele de viață, nivelul abilităților de săpare, de atac, de mișcare, nivelul de viziune din jurul robotului, dacă robotul are o antenă (care îi oferă abilitatea “Scan”; o valoare de 0 înseamnă ca nu are, iar o valoare de 1 înseamnă ca are), și dacă robotul are o baterie (analog cu antena, 0 înseamnă că nu are, iar 1 înseamnă că are).
+
+Ultima linie conține numărul de minereuri pe care robotul le are in magazie/inventar ca numere, în următoarea ordine: Numărul de “Cobblestone”, numarul de “Iron”, si numarul de “Osmium”.
