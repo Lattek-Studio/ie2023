@@ -10,6 +10,7 @@ player = Perseus()
 # function triggered by file creation
 def funky(read_file_path, tura):
     read_input = open(read_file_path, "r")
+    player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
 

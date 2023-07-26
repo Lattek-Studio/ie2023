@@ -41,6 +41,9 @@ class Perseus:
         self.xCoord = int(coords.split(" ")[0])
         self.yCoord = int(coords.split(" ")[1])
 
+        if (self.tura == 0):
+            self.setHome(self.xCoord, self.yCoord)
+
         abilities = file[self.ySize + 2]
 
         self.health = int(abilities.split(" ")[0])
@@ -68,3 +71,10 @@ class Perseus:
                 item = self.fullMap[y * self.xSize + x]
                 print(item, end='')
             print("")
+
+    def setTura(self, tura):
+        self.tura = tura
+
+    def setHome(self, x, y):
+        self.homeX = x
+        self.homeY = y
