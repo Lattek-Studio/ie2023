@@ -22,9 +22,8 @@ def funky(read_file_path, tura):
 
     # update zone
 
-    currentView = player.map
-    if (map.count("F") and not player.fullMap.count("F")):
-        index = map.index("F")
+    if (player.map.count("F") and not player.fullMap.count("F")):
+        index = player.map.index("F")
         xZone = index % player.xSize
         yZone = index // player.xSize
         player.setZone(xZone, yZone)
@@ -93,10 +92,13 @@ def funky(read_file_path, tura):
         pointGoalY = player.homeY
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
-    if (player.health < 5):
+    if (player.health < 5 and player.osmium):
         buy = " b h"
-    if (player.health < 10 and player.battery):
+    if (player.health < 10 and player.battery and player.osmium):
         buy = " b h"
+
+    # atack
+
     # pointGoalX = player.xSize // 2
     # pointGoalY = player.ySize // 2
     if (player.fullMap.count("F")):
