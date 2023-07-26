@@ -5,6 +5,7 @@ import os
 from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
+from pathfinding.spiral import get_spiral_traj
 
 
 player = Perseus()
@@ -19,9 +20,30 @@ def funky(read_file_path, tura):
     input = read_input.read()
     player.addReading(input)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
+    pointGoalX = player.xCoord
+    pointGoalY = player.yCoord
+    # spiral magic
+    spiral = get_spiral_traj(4, 6, player.homeX, player.homeY)
+    filtered = []
+    # remove spiral point that are ? in player.fullMap
+    if (not player.fullMap == ""):
 
-    pointGoalX = player.xCoord - 2
-    pointGoalY = player.yCoord - 1
+        for point in spiral:
+            if point[0] < 0 or point[0] >= player.xSize or point[1] < 0 or point[1] >= player.ySize:
+                spiral.remove(point)
+            elif not player.fullMap[point[1] * player.xSize + point[0]] == '?':
+                spiral.remove(point)
+            else:
+                filtered.append(point)
+        if (len(filtered) > 0):
+            pointGoalX = filtered[0][0]
+            pointGoalY = filtered[0][1]
+            print(
+                "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
+            print(
+                "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
+            print("SPIRAL: ", filtered[0][0], filtered[0][1])
+    print(filtered)
 
     if (player.fullMap.count("C") or player.fullMap.count("D")):
         # find ore coords
@@ -55,6 +77,10 @@ def funky(read_file_path, tura):
                 pointGoalY = oreY
 
         print(indexes_dict)
+
+    if (player.iron > 0 and player.osmium > 0):
+        pointGoalX = player.homeX
+        pointGoalY = player.homeY
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
@@ -68,6 +94,7 @@ def funky(read_file_path, tura):
         player.goals.addGoal(Goal("goOffset", {
                              "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
     print("TURA", tura)
+    print("COORDS: ", player.xCoord, player.yCoord)
     # player.printFullMap()
 
     message = player.goals.executeGoals()
@@ -75,11 +102,13 @@ def funky(read_file_path, tura):
     read_input.close()
 
 
-def send_command(actions_string,tura):
-    out = open(os.path.join("simulator","game","c{}_{}.txt".format(my_id,tura)), "a")
+def send_command(actions_string, tura):
+    out = open(os.path.join("simulator", "game",
+               "c{}_{}.txt".format(my_id, tura)), "a")
     out.write(actions_string)
     out.close()
     return
+
 
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -89,30 +118,6 @@ class MyHandler(FileSystemEventHandler):
                 inp_file_name.split('.')[0].split('_')[-1]))
 
 
-def get_spiral_traj(width,spirals,x,y):
-    correction_x = x
-    correction_y = y
-    x = 0
-    y= 0
-    prx=0
-    pry=0
-
-    coord_list = []
-
-    for i in range (spirals):
-        x=0-width-abs(prx)
-        coord_list.append((x+correction_x,y+correction_y))
-        y=0+width+abs(pry)
-        coord_list.append((x+correction_x,y+correction_y))
-        x=abs(x)
-        coord_list.append((x+correction_x,y+correction_y))
-        y=0-y
-        coord_list.append((x+correction_x,y+correction_y))
-        prx=x
-        pry=y
-
-    return coord_list
-  
 if __name__ == "__main__":
 
     while True:
