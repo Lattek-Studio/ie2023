@@ -79,11 +79,17 @@ class Grid:
             for y in range(0, self.ySize):
                 for x in range(0, self.xSize):
                     item = memoryMap[y][x]
-                    sum = item['g'] + item['h']
-                    if (sum > 10000000):
+                    sum = item['g']
+                    if (sum >= 10000000):
                         sum = '0'
                     extra = ' ' * (3 - len(str(sum)))
-                    sum = '[' + str(sum) + extra + ']'
+
+                    sum2 = item['h']
+                    if (sum2 >= 10000000):
+                        sum2 = '0'
+                    extra2 = ' ' * (3 - len(str(sum2)))
+                    sum = '[' + str(sum) + extra + ' ' + \
+                        str(sum2) + extra2 + ']'
                     print(sum, end='')
                 print("")
 
