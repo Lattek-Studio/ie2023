@@ -17,35 +17,37 @@ class Grid:
         000000000000000
         000000000000000
         000000000000000
-        """
-    cleanString = map.replace(" ", "").replace("\n", "")
+        """.replace(" ", "").replace("\n", "")
     array = []
 
     def __init__(self, map):
         if (map != None):
-            self.map = map
-            self.cleanString = map.replace(" ", "").replace("\n", "")
-
-        self.generateArrayfromMapString()
+            self.map = map.replace(" ", "").replace("\n", "")
 
     def setMap(self, map):
-        self.map = map
-        self.generateArrayfromMapString()
-
-    def generateArrayfromMapString(self):
-        for y in range(0, self.xSize):
-            for x in range(0, self.ySize):
-                self.array.append(self.cleanString[y * self.xSize + x])
+        self.map = map.replace(" ", "").replace("\n", "")
 
     def get(self, x, y):
         if (x < 0 or y < 0 or x >= self.xSize or y >= self.ySize):
             return None
-        return self.array[y * self.xSize + x]
+        return self.map[y * self.xSize + x]
 
     def set(self, x, y, value):
         if (x < 0 or y < 0 or x >= self.xSize or y >= self.ySize):
             return None
-        self.array[y * self.xSize + x] = value
+        position = y * self.xSize + x
+        map = map[:position] + value[0] + map[position+1:]
+
+    def isSolid(self, x, y):
+        item = self.get(x, y)
+        if (item == 'X'):
+            return True
+        if (item == 'A'):
+            return True
+        if (item == 'B'):
+            return True
+
+        return False
 
     def print(self):
         for y in range(0, self.ySize):
@@ -78,7 +80,7 @@ class Grid:
             return abs(endX - x) + abs(endY - y)
 
         def exists(x, y):
-            if (self.get(x, y) == '1'):
+            if (self.isSolid(x, y)):
                 return False
             return x >= 0 and y >= 0 and x < self.xSize and y < self.ySize
 
@@ -233,14 +235,14 @@ class Grid:
 
 
 test = Grid("""
-        .1.............
+        .B.............
+        .B.............
+        ......B........
         ...............
-        ......1........
+        BBBB...........
+        ....BB.........
         ...............
-        ...............
-        .....1.........
-        ...............
-        .....1111......
+        .....BBBB......
         ...............
         .........1.....
         ...............
