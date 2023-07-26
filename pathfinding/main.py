@@ -24,6 +24,8 @@ class Grid:
     def __init__(self, map):
         if (map != None):
             self.map = map
+            self.cleanString = map.replace(" ", "").replace("\n", "")
+
         self.generateArrayfromMapString()
 
     def setMap(self, map):
@@ -75,9 +77,17 @@ class Grid:
         def calculateH(x, y):
             return abs(endX - x) + abs(endY - y)
 
+        def exists(x, y):
+            if (self.get(x, y) == '1'):
+                return False
+            return x >= 0 and y >= 0 and x < self.xSize and y < self.ySize
+
         def printMemoryMap():
             for y in range(0, self.ySize):
                 for x in range(0, self.xSize):
+                    if (exists(x, y) == False):
+                        print('[  not  ]', end='')
+                        continue
                     item = memoryMap[y][x]
                     sum = item['g']
                     if (sum >= 10000000):
@@ -93,8 +103,22 @@ class Grid:
                     print(sum, end='')
                 print("")
 
-        def exists(x, y):
-            return x >= 0 and y >= 0 and x < self.xSize and y < self.ySize
+        def printMemoryMap2():
+            for y in range(0, self.ySize):
+                for x in range(0, self.xSize):
+                    if (exists(x, y) == False):
+                        print('[   ]', end='')
+                        continue
+                    item = memoryMap[y][x]
+                    sum = item['g'] + item['h']
+                    if (sum >= 10000000):
+                        sum = '0'
+                    extra = ' ' * (3 - len(str(sum)))
+
+                    sum = '[' + str(sum) + extra + ']'
+                    print(sum, end='')
+                print("")
+
         memoryMap[startY][startX] = {
             'g': 0,
             'h': calculateH(startX, startY),
@@ -137,20 +161,79 @@ class Grid:
 
             if exists(x - 1, y):
                 setParentProp(x - 1, y, x, y)
-                expand(x + 1, y)
+                expand(x - 1, y)
 
             if exists(x + 1, y):
                 setParentProp(x + 1, y, x, y)
                 expand(x + 1, y)
 
-        check(startX, startY)
-        printMemoryMap()
+        def findBestNextCheck(x, y):
+            options = [
+                {
+                    'x': x,
+                    'y': y - 1,
+                    'sum': memoryMap[y - 1][x]['g'] + memoryMap[y - 1][x]['h'],
+                    'h': memoryMap[y - 1][x]['h'],
+                },
+                {
+                    'x': x,
+                    'y': y + 1,
+                    'sum': memoryMap[y + 1][x]['g'] + memoryMap[y + 1][x]['h'],
+                    'h': memoryMap[y + 1][x]['h'],
+                },
+                {
+                    'x': x - 1,
+                    'y': y,
+                    'sum': memoryMap[y][x - 1]['g'] + memoryMap[y][x - 1]['h'],
+                    'h': memoryMap[y][x - 1]['h'],
+                },
+                {
+                    'x': x + 1,
+                    'y': y,
+                    'sum': memoryMap[y][x + 1]['g'] + memoryMap[y][x + 1]['h'],
+                    'h': memoryMap[y][x + 1]['h'],
+                }
+            ]
+            filtered_options = [
+                option for option in options if exists(option['x'], option['y'])]
+
+            filtered_options.sort(key=lambda x: int(x['sum']))
+            filtered_options.sort(key=lambda x: int(x['h']))
+
+            return filtered_options
+
         bestPath = []
+        bestPath.append({
+            'x': startX,
+            'y': startY,
+        })
+        for i in range(0, 1000):
+
+            check(bestPath[-1]['x'], bestPath[-1]['y'])
+            matches = findBestNextCheck(bestPath[-1]['x'], bestPath[-1]['y'])
+            # print(matches)
+            matches = [match for match in matches if not bestPath.count(
+                {'x': match['x'], 'y': match['y']})]
+
+            # print(matches)
+            if (len(matches) > 0):
+                bestPath.append({
+                    'x': matches[0]['x'],
+                    'y': matches[0]['y'],
+                })
+            else:
+                bestPath.pop()
+
+            if (bestPath[-1]['x'] == endX and bestPath[-1]['y'] == endY):
+                break
+
+        printMemoryMap2()
+        print(bestPath)
         return bestPath
 
 
 test = Grid("""
-        ...............
+        .1.............
         ...............
         ......1........
         ...............
@@ -166,7 +249,6 @@ test = Grid("""
         ...............
         ...............
         """)
-
 
 test.AStarPathfinding({
     'startX': 0,
