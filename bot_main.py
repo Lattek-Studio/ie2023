@@ -86,6 +86,9 @@ def funky(read_file_path, tura):
 
     # pointGoalX = player.xSize // 2
     # pointGoalY = player.ySize // 2
+    if (player.fullMap.count("F")):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
