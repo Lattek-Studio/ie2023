@@ -78,12 +78,14 @@ def funky(read_file_path, tura):
 
         print(indexes_dict)
     buy = ""
-    if (player.iron > 0 and player.osmium > 0):
+    if (player.iron > 0 and player.osmium > 0 and not player.battery):
         pointGoalX = player.homeX
         pointGoalY = player.homeY
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
 
+    # pointGoalX = player.xSize // 2
+    # pointGoalY = player.ySize // 2
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
