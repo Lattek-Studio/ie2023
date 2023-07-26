@@ -93,7 +93,10 @@ def funky(read_file_path, tura):
         pointGoalY = player.homeY
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
-
+    if (player.health < 5):
+        buy = " b h"
+    if (player.health < 10 and player.battery):
+        buy = " b h"
     # pointGoalX = player.xSize // 2
     # pointGoalY = player.ySize // 2
     if (player.fullMap.count("F")):
