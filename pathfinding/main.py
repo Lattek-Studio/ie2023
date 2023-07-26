@@ -20,12 +20,16 @@ class Grid:
         """.replace(" ", "").replace("\n", "")
     array = []
 
-    def __init__(self, map):
+    def __init__(self, map, xSize=15, ySize=15):
         if (map != None):
-            self.map = map.replace(" ", "").replace("\n", "")
+            self.setMap(map, xSize, ySize)
 
-    def setMap(self, map):
+    def setMap(self,  map, xSize=15, ySize=15):
+        if (map == None):
+            return
         self.map = map.replace(" ", "").replace("\n", "")
+        self.xSize = xSize
+        self.ySize = ySize
 
     def get(self, x, y):
         if (x < 0 or y < 0 or x >= self.xSize or y >= self.ySize):
@@ -40,11 +44,18 @@ class Grid:
 
     def isSolid(self, x, y):
         item = self.get(x, y)
-        if (item == 'X'):
-            return True
-        if (item == 'A'):
-            return True
+        # if (item == 'X'):
+        #     return True
+        # if (item == 'A'):
+        #     return True
         if (item == 'B'):
+            return True
+        if (item == '?'):
+            return True
+        if (item == 'F'):
+            return True
+
+        if (self.get(x-1, y) == 'F' or self.get(x, y-1) == 'F' or self.get(x+1, y) == 'F' or self.get(x, y+1) == 'F'):
             return True
 
         return False
@@ -226,35 +237,38 @@ class Grid:
             else:
                 bestPath.pop()
 
+            if (len(bestPath) == 0):
+                print("No path found")
+                return []
             if (bestPath[-1]['x'] == endX and bestPath[-1]['y'] == endY):
                 break
 
-        printMemoryMap2()
+        # printMemoryMap2()
         print(bestPath)
         return bestPath
 
 
-test = Grid("""
-        .B.............
-        .B.............
-        ......B........
-        ...............
-        BBBB...........
-        ....BB.........
-        ...............
-        .....BBBB......
-        ...............
-        .........1.....
-        ...............
-        ...............
-        ...............
-        ...............
-        ...............
-        """)
+# test = Grid("""
+#         .B.............
+#         .B.............
+#         ......B........
+#         ...............
+#         BBBB...........
+#         ....BB.........
+#         ...............
+#         .....BBBB......
+#         ...............
+#         .........1.....
+#         ...............
+#         ...............
+#         ...............
+#         ...............
+#         ...............
+#         """)
 
-test.AStarPathfinding({
-    'startX': 0,
-    'startY': 0,
-    'endX': 10,
-    'endY': 10,
-})
+# test.AStarPathfinding({
+#     'startX': 0,
+#     'startY': 0,
+#     'endX': 10,
+#     'endY': 10,
+# })

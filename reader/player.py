@@ -1,8 +1,16 @@
+from reader.goals import Goal, GoalSystem
+
+
 class Perseus:
     tura = 0
     map = ""
     reading = ""
     fullMap = ""
+    homeX = ""
+    homeY = ""
+    xCoord = ""
+    yCoord = ""
+    goals = GoalSystem()
 
     def generateUnknown(self):
         unknown = ""
@@ -19,16 +27,12 @@ class Perseus:
                 self.fullMap = self.fullMap[:i] + \
                     self.map[i] + self.fullMap[i+1:]
 
-    def nextRound(self):
-        self.tura = self.tura + 1
-
     def addReading(self, reading):
-        self.nextRound()
-        self.reading = reading
-
-        file = reading.read().strip().lstrip().split("\n")
+        if (len(reading) == 0):
+            return
+        self.reading = reading.strip().lstrip()
+        file = reading.strip().lstrip().split("\n")
         size = file[0]
-
         self.xSize = int(size.split(" ")[0])
         self.ySize = int(size.split(" ")[1])
 
@@ -40,6 +44,9 @@ class Perseus:
 
         self.xCoord = int(coords.split(" ")[0])
         self.yCoord = int(coords.split(" ")[1])
+
+        if (self.tura == 0):
+            self.setHome(self.xCoord, self.yCoord)
 
         abilities = file[self.ySize + 2]
 
@@ -61,8 +68,23 @@ class Perseus:
         self.combineMaps()
 
     def printFullMap(self):
+        if (self.fullMap == ""):
+            return
         for y in range(0, self.ySize):
             for x in range(0, self.xSize):
                 item = self.fullMap[y * self.xSize + x]
                 print(item, end='')
             print("")
+        if (self.homeX == "" or self.homeY == ""):
+            return
+        print('HOME: ', self.homeX, self.homeY)
+        if (self.xCoord == "" or self.yCoord == ""):
+            return
+        print('COORDS: ', self.xCoord, self.yCoord)
+
+    def setTura(self, tura):
+        self.tura = tura
+
+    def setHome(self, x, y):
+        self.homeX = x
+        self.homeY = y
