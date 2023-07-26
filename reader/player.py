@@ -88,3 +88,12 @@ class Perseus:
     def setHome(self, x, y):
         self.homeX = x
         self.homeY = y
+
+    def setZone(self, x, y):
+        ring = 0
+        if (x > self.xSize // 2):
+            ring = 2 * self.xSize - x
+            return
+        else:
+            ring = x
+        # fill ring

@@ -19,6 +19,16 @@ def funky(read_file_path, tura):
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
+
+    # update zone
+
+    currentView = player.map
+    if (map.count("F") and not player.fullMap.count("F")):
+        index = map.index("F")
+        xZone = index % player.xSize
+        yZone = index // player.xSize
+        player.setZone(xZone, yZone)
+
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
@@ -78,12 +88,20 @@ def funky(read_file_path, tura):
 
         print(indexes_dict)
     buy = ""
-    if (player.iron > 0 and player.osmium > 0):
+    if (player.iron > 0 and player.osmium > 0 and not player.battery):
         pointGoalX = player.homeX
         pointGoalY = player.homeY
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
-
+    if (player.health < 5):
+        buy = " b h"
+    if (player.health < 10 and player.battery):
+        buy = " b h"
+    # pointGoalX = player.xSize // 2
+    # pointGoalY = player.ySize // 2
+    if (player.fullMap.count("F")):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
