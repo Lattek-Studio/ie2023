@@ -44,13 +44,18 @@ class Grid:
 
     def isSolid(self, x, y):
         item = self.get(x, y)
-        if (item == 'X'):
-            return True
-        if (item == 'A'):
-            return True
+        # if (item == 'X'):
+        #     return True
+        # if (item == 'A'):
+        #     return True
         if (item == 'B'):
             return True
         if (item == '?'):
+            return True
+        if (item == 'F'):
+            return True
+
+        if (self.get(x-1, y) == 'F' or self.get(x, y-1) == 'F' or self.get(x+1, y) == 'F' or self.get(x, y+1) == 'F'):
             return True
 
         return False

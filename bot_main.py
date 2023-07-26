@@ -20,14 +20,49 @@ def funky(read_file_path, tura):
     player.addReading(input)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
 
+    pointGoalX = player.xCoord - 2
+    pointGoalY = player.yCoord - 1
+
+    if (player.fullMap.count("C") or player.fullMap.count("D")):
+        # find ore coords
+        map = player.fullMap
+        indexes_dict = {'C': [], 'D': []}
+
+        for i, char in enumerate(map):
+            if char in indexes_dict:
+                indexes_dict[char].append(i)
+
+        allOres = indexes_dict['C'] + indexes_dict['D']
+
+        # find closest ore
+        minOre = 10000000
+        for ore in allOres:
+            # find x and y
+            oreX = ore % player.xSize
+            oreY = ore // player.xSize
+
+            # find distance
+            distance = len(grid.AStarPathfinding({
+                'startX': player.xCoord,
+                'startY': player.yCoord,
+                'endX': oreX,
+                'endY': oreY,
+            }))
+
+            if (distance < minOre):
+                minOre = distance
+                pointGoalX = oreX
+                pointGoalY = oreY
+
+        print(indexes_dict)
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
-        'endX': player.xCoord - 8,
-        'endY': player.yCoord - 3,
+        'endX': pointGoalX,
+        'endY': pointGoalY,
     })
 
-    if (len(path) > 0):
+    if (len(path) > 1):
         player.goals.removeGoal()
         print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
@@ -36,7 +71,7 @@ def funky(read_file_path, tura):
     # player.printFullMap()
 
     message = player.goals.executeGoals()
-    send_command(message, tura)
+    send_command(message + " m " + message, tura)
     read_input.close()
 
 
