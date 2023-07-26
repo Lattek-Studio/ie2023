@@ -14,8 +14,8 @@ def funky(read_file_path, tura):
     player.addReading(input)
 
     print("TURA", tura)
-
-    send_command("U M U", tura)
+    player.printFullMap()
+    send_command("u m u", tura)
     read_input.close()
 
 

@@ -23,12 +23,12 @@ class Perseus:
         self.tura = self.tura + 1
 
     def addReading(self, reading):
+        if (len(reading) == 0):
+            return
         self.nextRound()
-        self.reading = reading
-
-        file = reading.read().strip().lstrip().split("\n")
+        self.reading = reading.strip().lstrip()
+        file = reading.strip().lstrip().split("\n")
         size = file[0]
-
         self.xSize = int(size.split(" ")[0])
         self.ySize = int(size.split(" ")[1])
 
@@ -61,6 +61,8 @@ class Perseus:
         self.combineMaps()
 
     def printFullMap(self):
+        if (self.fullMap == ""):
+            return
         for y in range(0, self.ySize):
             for x in range(0, self.xSize):
                 item = self.fullMap[y * self.xSize + x]
