@@ -12,15 +12,15 @@ class Perseus:
         self.ySize = int(size.split(" ")[1])
 
         self.map = ''
-        for i in range(1, ySize):
+        for i in range(1, self.ySize):
             self.map += file[i]
 
-        coords = file[ySize + 1]
+        coords = file[self.ySize + 1]
 
         self.xCoord = int(coords.split(" ")[0])
         self.yCoord = int(coords.split(" ")[1])
 
-        abilities = file[ySize + 2]
+        abilities = file[self.ySize + 2]
 
         self.health = int(abilities.split(" ")[0])
         self.dig = int(abilities.split(" ")[1])
@@ -30,7 +30,7 @@ class Perseus:
         self.scan = int(abilities.split(" ")[5])
         self.battery = int(abilities.split(" ")[6])
 
-        resources = file[ySize + 3]
+        resources = file[self.ySize + 3]
 
         self.cobblestone = int(resources.split(" ")[0])
         self.iron = int(resources.split(" ")[1])
