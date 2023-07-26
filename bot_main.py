@@ -4,11 +4,11 @@ import os
 
 #function triggered by file creation
 def funky():
-    print("funky")
+    print("funky_sussy")
 
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
-        if "amogus" in event.src_path:
+        if  event.src_path.split('/')[-1][0] == 's' and event.src_path.endswith('.txt'):
             funky()
 
 if __name__ == "__main__":
