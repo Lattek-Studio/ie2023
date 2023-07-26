@@ -1,19 +1,40 @@
 class Perseus:
+    tura = 0
+    map = ""
     reading = ""
+    fullMap = ""
+
+    def generateUnknown(self):
+        unknown = ""
+        for i in range(0, self.xSize * self.ySize):
+            unknown += "?"
+        return unknown
+
+    def combineMaps(self):
+        if (self.fullMap == ""):
+            self.fullMap = self.generateUnknown()
+
+        for i in range(0, len(self.map)):
+            if (self.map[i] != "?"):
+                self.fullMap = self.fullMap[:i] + \
+                    self.map[i] + self.fullMap[i+1:]
+
+    def nextRound(self):
+        self.tura = self.tura + 1
 
     def addReading(self, reading):
+        self.nextRound()
         self.reading = reading
 
-        file = self.reading.read().split("\n")
-
+        file = reading.read().strip().lstrip().split("\n")
         size = file[0]
 
         self.xSize = int(size.split(" ")[0])
         self.ySize = int(size.split(" ")[1])
 
         self.map = ''
-        for i in range(1, self.ySize):
-            self.map += file[i]
+        for i in range(1, self.ySize + 1):
+            self.map += file[i].replace(" ", "")
 
         coords = file[self.ySize + 1]
 
@@ -35,3 +56,13 @@ class Perseus:
         self.cobblestone = int(resources.split(" ")[0])
         self.iron = int(resources.split(" ")[1])
         self.osmium = int(resources.split(" ")[2])
+
+        # update dependency
+        self.combineMaps()
+
+    def printFullMap(self):
+        for y in range(0, self.ySize):
+            for x in range(0, self.xSize):
+                item = self.fullMap[y * self.xSize + x]
+                print(item, end='')
+            print("")
