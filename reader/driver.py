@@ -6,4 +6,4 @@ data = open("./reader/test.txt", "r")
 
 player.addReading(data)
 
-print(player.health)
+print(player.printFullMap())
