@@ -3,6 +3,11 @@ class Perseus:
     map = ""
     reading = ""
     fullMap = ""
+    homeX = ""
+    homeY = ""
+    xCoord = ""
+    yCoord = ""
+    tura = 0
 
     def generateUnknown(self):
         unknown = ""
@@ -19,13 +24,9 @@ class Perseus:
                 self.fullMap = self.fullMap[:i] + \
                     self.map[i] + self.fullMap[i+1:]
 
-    def nextRound(self):
-        self.tura = self.tura + 1
-
     def addReading(self, reading):
         if (len(reading) == 0):
             return
-        self.nextRound()
         self.reading = reading.strip().lstrip()
         file = reading.strip().lstrip().split("\n")
         size = file[0]
@@ -71,7 +72,11 @@ class Perseus:
                 item = self.fullMap[y * self.xSize + x]
                 print(item, end='')
             print("")
+        if (self.homeX == "" or self.homeY == ""):
+            return
         print('HOME: ', self.homeX, self.homeY)
+        if (self.xCoord == "" or self.yCoord == ""):
+            return
         print('COORDS: ', self.xCoord, self.yCoord)
 
     def setTura(self, tura):
