@@ -32,11 +32,24 @@ class Spiral:
                 self.spiralData.remove(point)
         for point in self.spiralData:
             if self.fullMap[point[1] * self.xSize + point[0]] == 'B':
-                self.spiralData.remove(point)
+                # delete everything that comes before point in spiral
+                i = 0
+                while (i <= len(self.spiralData)-1):
+                    if (self.spiralData[0] == point):
+                        break
+                    self.spiralData.pop(0)
+                    i = i+1
+                self.spiralData.pop(0)
 
         for point in self.spiralData:
             if not self.fullMap[point[1] * self.xSize + point[0]] == '?':
-                self.spiralData.remove(point)
+                i = 0
+                while (i <= len(self.spiralData)-1):
+                    if (self.spiralData[0] == point):
+                        break
+                    self.spiralData.pop(0)
+                    i = i+1
+                self.spiralData.pop(0)
 
     def createSpiral(self):
         print("ADD SPIRAL>>>>>>>>>>>>>>>")
