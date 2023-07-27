@@ -54,7 +54,7 @@ class Grid:
 
         if (self.map[self.yCoord*self.xSize+self.xCoord] == 'F'):
             if (item == "F"):
-                return True
+                return False
         # if (item == 'X'):
         #     return True
         # if (item == 'A'):

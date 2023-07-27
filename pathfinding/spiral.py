@@ -20,8 +20,8 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
     #     x -= lim_x//6
     #     y -= lim_y//6
 
-    correction_x = x
-    correction_y = y
+    correction_x = int(x)
+    correction_y = int(y)
     x = 0
     y = 0
     prx = 0
@@ -56,6 +56,7 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
         pry = y
 
     return coord_list
+
 
 """#spiral debug
 
