@@ -56,7 +56,7 @@ class Grid:
             if (item == "F"):
                 return False
         if (self.get(self.xCoord-1, self.yCoord) == 'F' or self.get(self.xCoord, self.yCoord-1) == 'F' or self.get(self.xCoord+1, self.yCoord) == 'F' or self.get(self.xCoord, self.yCoord+1) == 'F'):
-            if (item == "F"):
+            if (self.get(x-1, y) == 'F' or self.get(x, y-1) == 'F' or self.get(x+1, y) == 'F' or self.get(x, y+1) == 'F'):
                 return False
 
         # if (item == 'X'):
