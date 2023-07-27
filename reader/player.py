@@ -116,14 +116,14 @@ class Perseus:
             return True
         if (self.getBlock(self.xCoord, self.yCoord-1) == "B"):
             return True
-        if (self.getBlock(self.xCoord+1, self.yCoord+1) == "B"):
-            return True
-        if (self.getBlock(self.xCoord-1, self.yCoord-1) == "B"):
-            return True
-        if (self.getBlock(self.xCoord+1, self.yCoord-1) == "B"):
-            return True
-        if (self.getBlock(self.xCoord-1, self.yCoord+1) == "B"):
-            return True
+        # if (self.getBlock(self.xCoord+1, self.yCoord+1) == "B"):
+        #     return True
+        # if (self.getBlock(self.xCoord-1, self.yCoord-1) == "B"):
+        #     return True
+        # if (self.getBlock(self.xCoord+1, self.yCoord-1) == "B"):
+        #     return True
+        # if (self.getBlock(self.xCoord-1, self.yCoord+1) == "B"):
+        #     return True
         return False
 
     def setZone(self, x, y):
