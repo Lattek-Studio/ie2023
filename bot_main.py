@@ -168,6 +168,8 @@ def funky(read_file_path, tura):
 
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
+    if (player.iron >= 3 and player.battery == 1):
+        buy = " b a"
     if (player.health < 5 and player.osmium):
         buy = " b h"
     if (player.health < 10 and player.battery and player.osmium):
