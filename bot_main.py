@@ -204,7 +204,9 @@ def funky(read_file_path, tura):
         direction = futureGoal.getDirectionLetter()
         if( not direction == False):
             mineDirection = direction
-        if(futureBlock == "X" or futureBlock == "A" or futureBlock == "C" or futureBlock == "D" ):
+        if(not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D" ):
+            options = ["l", "r", "u", "d"]
+            options.remove(mineDirection)
             mineDirection = ["l", "r", "u", "d"][random.randint(0, 3)]
 
     action = " m " + mineDirection
