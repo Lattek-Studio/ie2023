@@ -27,6 +27,7 @@ def funky(read_file_path, tura):
     grid.setPlayer(player.xCoord, player.yCoord)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pathManager.setPlayerPos(player.xCoord, player.yCoord)
+
     # pathManager.updateRemove()
 
     # update spiral engine
@@ -185,12 +186,15 @@ def funky(read_file_path, tura):
         pointGoalX = player.xSize // 2
         pointGoalY = player.ySize // 2
         positionSource = "middle IM IN ZONE"
+
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
         'endX': pointGoalX,
         'endY': pointGoalY,
     })
+    if (player.hasLavaNearby()):
+        pathManager.setPath(path)
     pathManager.setCoords(pointGoalX, pointGoalY)
     if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
         if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
