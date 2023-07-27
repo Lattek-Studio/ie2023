@@ -54,7 +54,7 @@ class Spiral:
     def createSpiral(self):
         print("ADD SPIRAL>>>>>>>>>>>>>>>")
         self.spiralData = get_spiral_traj(
-            5, 5, self.homeX, self.homeY, self.xSize, self.ySize)
+            5, 7, self.homeX, self.homeY, self.xSize, self.ySize)
 
         for point in self.spiralData:
             i = 0
