@@ -257,13 +257,14 @@ def funky(read_file_path, tura):
             mineDirection = direction
         if (not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D"):
             options = ["l", "r", "u", "d"]
-            if (player.getBlock(futureBlockX + 1, futureBlockY)):
+            cantMine = ["B", ".", "0", "1", "2", "3", "4"]
+            if (cantMine.count(player.getBlock(futureBlockX + 1, futureBlockY))):
                 options.remove("r")
-            if (player.getBlock(futureBlockX - 1, futureBlockY)):
+            if (cantMine.count(player.getBlock(futureBlockX - 1, futureBlockY))):
                 options.remove("l")
-            if (player.getBlock(futureBlockX, futureBlockY + 1)):
+            if (cantMine.count(player.getBlock(futureBlockX, futureBlockY + 1))):
                 options.remove("d")
-            if (player.getBlock(futureBlockX, futureBlockY - 1)):
+            if (cantMine.count(player.getBlock(futureBlockX, futureBlockY - 1))):
                 options.remove("u")
             if (len(options) > 0):
                 mineDirection = options[random.randint(0, len(options) - 1)]
