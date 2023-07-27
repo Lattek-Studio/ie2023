@@ -241,15 +241,15 @@ def funky(read_file_path, tura):
     # prediction mining
     print('PATH LENGTH IN FUTURE: ', len(path))
     mineDirection = message
-    if (len(path) >= 3):
-        futureRobotX = path[1]['x']
-        futureRobotY = path[1]['y']
-        futureBlockX = path[2]['x']
-        futureBlockY = path[2]['y']
+    if (len(path) >= 2):
+        futureRobotX = path[0]['x']
+        futureRobotY = path[0]['y']
+        futureBlockX = path[1]['x']
+        futureBlockY = path[1]['y']
         futureBlock = player.getBlock(futureBlockX, futureBlockY)
 
         futureGoal = Goal("goOffset", {
-            "x": path[2]['x'] - path[1]['x'], "y": path[2]['y'] - path[1]['y']})
+            "x": path[1]['x'] - path[0]['x'], "y": path[1]['y'] - path[0]['y']})
         direction = futureGoal.getDirectionLetter()
         print("direction letter: ", direction)
         if (not direction == False):
