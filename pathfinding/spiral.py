@@ -3,26 +3,23 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
 
     if x<=lim_x/2 and y<=lim_y/2:
         #1
-        x+=lim_x/4
-        y+=lim_y/4
+        x+=lim_x//4
+        y+=lim_y//4
 
-    elif x>lim_x/2 and y<=lim_y/2:
+    elif x<lim_x/2 and y>=lim_y/2:
         #3
-        x+=lim_x/4
-        y-=lim_y/4
+        x+=lim_x//4
+        y-=lim_y//4
 
-    elif x<=lim_x/2 and y>lim_y/2:
+    elif x>=lim_x/2 and y<lim_y/2:
         #2
-        x-=lim_x/4
-        y+=lim_y/4
+        x-=lim_x//4
+        y+=lim_y//4
 
     elif x>lim_x/2 and y>lim_y/2:
         #4
-        x-=lim_x/4
-        y-=lim_y/4
-
-    x=int(x)
-    y=int(y)
+        x-=lim_x//4
+        y-=lim_y//4
 
     correction_x = x
     correction_y = y
