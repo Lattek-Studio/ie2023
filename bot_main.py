@@ -54,6 +54,7 @@ def funky(read_file_path, tura):
     # default variables
     randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                           1, 1, 1, 2, 2, 3, 4]
+    randomPosibilities = [0, 0, 0]
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
