@@ -1,2 +1,6 @@
-**/simulator/*
-simulator/simulator.exe
+**/simulator/game
+**/simulator/resources
+**/simulator/example_bot.exe
+**/simulator/simulator.exe
+**/simulator/mars_bot.exe
+**/simulator/imgui.ini
