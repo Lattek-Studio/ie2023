@@ -10,6 +10,8 @@ class Perseus:
     homeY = ""
     xCoord = ""
     yCoord = ""
+    xSize = 0
+    ySize = 0
     goals = GoalSystem()
 
     def generateUnknown(self):
@@ -88,3 +90,47 @@ class Perseus:
     def setHome(self, x, y):
         self.homeX = x
         self.homeY = y
+
+    def isRobot(self, x, y):
+        if (self.fullMap[y*self.xSize+x] == "0"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "1"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "2"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "3"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "4"):
+            return True
+        return False
+
+    def setZone(self, x, y):
+        zone_width = min(abs(x-0), abs(x-self.xSize),
+                         abs(y-0), abs(y-self.ySize))
+
+        def setblocked(x, y):
+            i = y*self.xSize+x
+            self.fullMap = self.fullMap[:i] + \
+                "F" + self.fullMap[i+1:]
+
+        for x in range(0, zone_width):
+            for y in range(0, self.ySize):
+                setblocked(x, y)
+        for x in range(zone_width, self.xSize):
+            for y in range(self.ySize-zone_width, self.ySize):
+                setblocked(x, y)
+        for x in range(self.xSize-zone_width, self.xSize):
+            for y in range(0, self.ySize-zone_width):
+                setblocked(x, y)
+        for x in range(zone_width, self.xSize-zone_width):
+            for y in range(0, zone_width):
+                setblocked(x, y)
+
+        """self.fullMap
+        ring = 0
+        if (x > self.xSize // 2):
+            ring = 2 * self.xSize - x
+            return
+        else:
+            ring = x"""
+        # fill ring

@@ -5,6 +5,7 @@ import os
 from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
+from pathfinding.spiral import get_spiral_traj
 
 
 player = Perseus()
@@ -18,10 +19,56 @@ def funky(read_file_path, tura):
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
-    grid.setMap(player.fullMap, player.xSize, player.ySize)
+    grid.setPlayer(player.xCoord, player.yCoord)
+    positionSource = "NONE"
+    # update zone
 
-    pointGoalX = player.xCoord - 2
-    pointGoalY = player.yCoord - 1
+    if (player.map.count("F")):
+        indexes_dict = {'F': []}
+
+        for i, char in enumerate(player.map):
+            if char in indexes_dict:
+                indexes_dict[char].append(i)
+        for index in indexes_dict['F']:
+            xZone = index % player.xSize
+            yZone = index // player.xSize
+            player.setZone(xZone, yZone)
+
+    grid.setMap(player.fullMap, player.xSize, player.ySize)
+    pointGoalX = player.xSize // 2
+    pointGoalY = player.ySize // 2
+    positionSource = "first middle"
+    # spiral magic
+    spiral = get_spiral_traj(
+        6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
+    # print(spiral)
+    if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
+        spiral = []
+    filtered = []
+    # remove spiral point that are ? in player.fullMap
+    if (not player.fullMap == ""):
+
+        for point in spiral:
+            if point[0] < 0 or point[0] >= player.xSize or point[1] < 0 or point[1] >= player.ySize:
+                spiral.remove(point)
+            elif not player.fullMap[point[1] * player.xSize + point[0]] == '?':
+                spiral.remove(point)
+            elif player.fullMap[point[1] * player.xSize + point[0]] == 'B':
+                spiral.remove(point)
+            elif player.fullMap[point[1] * player.xSize + point[0]] == 'F':
+                spiral.remove(point)
+            else:
+                filtered.append(point)
+        if (len(filtered) > 0):
+            pointGoalX = filtered[0][0]
+            pointGoalY = filtered[0][1]
+            positionSource = "SPIRAL"
+            print(
+                "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
+            print(
+                "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
+            print("SPIRAL: ", filtered[0][0], filtered[0][1])
+    print(filtered)
 
     if (player.fullMap.count("C") or player.fullMap.count("D")):
         # find ore coords
@@ -53,33 +100,89 @@ def funky(read_file_path, tura):
                 minOre = distance
                 pointGoalX = oreX
                 pointGoalY = oreY
+                positionSource = "ORE"
 
         print(indexes_dict)
+    buy = ""
+    if (player.iron > 0 and player.osmium > 0 and not player.battery):
+        pointGoalX = player.homeX
+        pointGoalY = player.homeY
+        positionSource = "HOME BUY BATTERY"
+
+        if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
+            buy = " b b"
+    if (player.health < 5 and player.osmium):
+        buy = " b h"
+    if (player.health < 10 and player.battery and player.osmium):
+        buy = " b h"
+
+    # atack
+
+    # pointGoalX = player.xSize // 2
+    # pointGoalY = player.ySize // 2
+    # if (player.fullMap.count("F")):
+    #     pointGoalX = player.xSize // 2
+    #     pointGoalY = player.ySize // 2
+    if (player.fullMap[player.yCoord * player.xSize + player.xCoord] == 'F'):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
+        positionSource = "middle IM IN ZONE"
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
         'endX': pointGoalX,
         'endY': pointGoalY,
     })
-
-    if (len(path) > 1):
+    print(path)
+    if (len(path) >= 1):
         player.goals.removeGoal()
         print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
                              "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
-    print("TURA", tura)
-    # player.printFullMap()
+    elif (len(path) == 1 or len(path) == 0):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
+        positionSource = "SECOND middle"
+        path = grid.AStarPathfinding({
+            'startX': player.xCoord,
+            'startY': player.yCoord,
+            'endX': pointGoalX,
+            'endY': pointGoalY,
+        })
+        if (len(path) > 1):
+            player.goals.removeGoal()
+            print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
+            player.goals.addGoal(Goal("goOffset", {
+                "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
 
+    print("TURA", tura)
+    print("COORDS: ", player.xCoord, player.yCoord)
+    # player.printFullMap()
+    print("GOAL: ", pointGoalX, pointGoalY)
+    print("SURSA: ", positionSource)
+    player.printFullMap()
     message = player.goals.executeGoals()
-    send_command(message + " m " + message, tura)
+    action = " m " + message
+    if (player.isRobot(player.xCoord - 1, player.yCoord)):
+        action = " a " + "l"
+    if (player.isRobot(player.xCoord + 1, player.yCoord)):
+        action = " a " + "r"
+    if (player.isRobot(player.xCoord, player.yCoord + 1)):
+        action = " a " + "d"
+    if (player.isRobot(player.xCoord, player.yCoord - 1)):
+        action = " a " + "u"
+    print("ACTION: ", action)
+    send_command(message + action + buy, tura)
     read_input.close()
 
 
-def send_command(actions_string,tura):
-    out = open(os.path.join("simulator","game","c{}_{}.txt".format(my_id,tura)), "a")
+def send_command(actions_string, tura):
+    out = open(os.path.join("simulator", "game",
+               "c{}_{}.txt".format(my_id, tura)), "a")
     out.write(actions_string)
     out.close()
     return
+
 
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -89,30 +192,6 @@ class MyHandler(FileSystemEventHandler):
                 inp_file_name.split('.')[0].split('_')[-1]))
 
 
-def get_spiral_traj(width,spirals,x,y):
-    correction_x = x
-    correction_y = y
-    x = 0
-    y= 0
-    prx=0
-    pry=0
-
-    coord_list = []
-
-    for i in range (spirals):
-        x=0-width-abs(prx)
-        coord_list.append((x+correction_x,y+correction_y))
-        y=0+width+abs(pry)
-        coord_list.append((x+correction_x,y+correction_y))
-        x=abs(x)
-        coord_list.append((x+correction_x,y+correction_y))
-        y=0-y
-        coord_list.append((x+correction_x,y+correction_y))
-        prx=x
-        pry=y
-
-    return coord_list
-  
 if __name__ == "__main__":
 
     while True:
