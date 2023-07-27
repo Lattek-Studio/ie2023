@@ -57,7 +57,7 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
 
     return coord_list
 
-#spiral debug
+"""#spiral debug
 
 import matplotlib.pyplot as plt
 
@@ -81,4 +81,4 @@ plt.ylim(-35, 35)
 
 # Show the plot
 plt.grid(True)
-plt.show()
+plt.show()"""
