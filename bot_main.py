@@ -6,11 +6,12 @@ from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
 from pathfinding.spiral import get_spiral_traj
-
+from pathfinding.spiralmemory import Spiral
 
 player = Perseus()
 player.goals.addGoal(Goal("goOffset", {"x": -1, "y": 0}))
 grid = Grid("")
+spiralMemory = Spiral()
 # function triggered by file creation
 
 
@@ -21,7 +22,15 @@ def funky(read_file_path, tura):
     player.addReading(input)
     grid.setPlayer(player.xCoord, player.yCoord)
     positionSource = "NONE"
+    spiralMemory.setHome(player.homeX, player.homeY)
+    spiralMemory.setSize(player.xSize, player.ySize)
+
     # update zone
+
+    if (not spiralMemory.generated):
+        spiralMemory.createSpiral()
+
+    spiralMemory.addMap(player.fullMap, player.xSize, player.ySize)
 
     if (player.map.count("F")):
         indexes_dict = {'F': []}
@@ -39,36 +48,47 @@ def funky(read_file_path, tura):
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
     # spiral magic
-    spiral = get_spiral_traj(
-        6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
-    # print(spiral)
-    if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
-        spiral = []
-    filtered = []
-    # remove spiral point that are ? in player.fullMap
-    if (not player.fullMap == ""):
+    # spiral = get_spiral_traj(
+    #     6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
+    # # print(spiral)
+    # if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
+    #     spiral = []
+    # filtered = []
+    # # remove spiral point that are ? in player.fullMap
+    # if (not player.fullMap == ""):
 
-        for point in spiral:
-            if point[0] < 0 or point[0] >= player.xSize or point[1] < 0 or point[1] >= player.ySize:
-                spiral.remove(point)
-            elif not player.fullMap[point[1] * player.xSize + point[0]] == '?':
-                spiral.remove(point)
-            elif player.fullMap[point[1] * player.xSize + point[0]] == 'B':
-                spiral.remove(point)
-            elif player.fullMap[point[1] * player.xSize + point[0]] == 'F':
-                spiral.remove(point)
-            else:
-                filtered.append(point)
-        if (len(filtered) > 0):
-            pointGoalX = filtered[0][0]
-            pointGoalY = filtered[0][1]
-            positionSource = "SPIRAL"
-            print(
-                "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
-            print(
-                "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
-            print("SPIRAL: ", filtered[0][0], filtered[0][1])
-    print(filtered)
+    #     for point in spiral:
+    #         if point[0] < 0 or point[0] >= player.xSize or point[1] < 0 or point[1] >= player.ySize:
+    #             spiral.remove(point)
+    #         elif not player.fullMap[point[1] * player.xSize + point[0]] == '?':
+    #             spiral.remove(point)
+    #         elif player.fullMap[point[1] * player.xSize + point[0]] == 'B':
+    #             spiral.remove(point)
+    #         elif player.fullMap[point[1] * player.xSize + point[0]] == 'F':
+    #             spiral.remove(point)
+    #         else:
+    #             filtered.append(point)
+    #     if (len(filtered) > 0):
+    #         pointGoalX = filtered[0][0]
+    #         pointGoalY = filtered[0][1]
+    #         positionSource = "SPIRAL"
+    #         print(
+    #             "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
+    #         print(
+    #             "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
+    #         print("SPIRAL: ", filtered[0][0], filtered[0][1])
+    # print(filtered)
+    print(spiralMemory.spiralData)
+    if (len(spiralMemory.spiralData) > 0):
+        pointGoalX = spiralMemory.spiralData[0][0]
+        pointGoalY = spiralMemory.spiralData[0][1]
+        positionSource = "SPIRAL"
+        print(
+            "BLOCK: ", player.fullMap[spiralMemory.spiralData[0][1] * player.xSize + spiralMemory.spiralData[0][0]])
+        print(
+            "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
+        print("SPIRAL: ",
+              spiralMemory.spiralData[0][0], spiralMemory.spiralData[0][1])
 
     if (player.fullMap.count("C") or player.fullMap.count("D")):
         # find ore coords
@@ -116,13 +136,16 @@ def funky(read_file_path, tura):
     if (player.health < 10 and player.battery and player.osmium):
         buy = " b h"
 
+    if (player.battery):
+        spiralMemory.clear()
     # atack
 
     # pointGoalX = player.xSize // 2
     # pointGoalY = player.ySize // 2
-    # if (player.fullMap.count("F")):
-    #     pointGoalX = player.xSize // 2
-    #     pointGoalY = player.ySize // 2
+    if (player.fullMap.count("F")):
+        spiralMemory.clear()
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
     if (player.fullMap[player.yCoord * player.xSize + player.xCoord] == 'F'):
         pointGoalX = player.xSize // 2
         pointGoalY = player.ySize // 2
@@ -134,7 +157,7 @@ def funky(read_file_path, tura):
         'endY': pointGoalY,
     })
     print(path)
-    if (len(path) >= 1):
+    if (len(path) >= 2):
         player.goals.removeGoal()
         print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
