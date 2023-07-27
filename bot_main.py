@@ -190,24 +190,34 @@ def funky(read_file_path, tura):
     player.printFullMap()
     message = player.goals.executeGoals()
     # prediction mining
+    print('PATH LENGTH IN FUTURE: ', len(path))
     mineDirection = message
     if (len(path) >= 3):
         futureRobotX = path[1]['x']
         futureRobotY = path[1]['y']
         futureBlockX = path[2]['x']
         futureBlockY = path[2]['y']
-        futureBlock = player.fullMap[futureBlockY *
-                                     player.xSize + futureBlockX]
+        futureBlock = player.getBlock(futureBlockX, futureBlockY)
 
         futureGoal = Goal("goOffset", {
-            "x": path[1]['x'] - path[2]['x'], "y": path[1]['y'] - path[2]['y']})
+            "x": path[2]['x'] - path[1]['x'], "y": path[2]['y'] - path[1]['y']})
         direction = futureGoal.getDirectionLetter()
+        print("direction letter: ", direction)
         if (not direction == False):
             mineDirection = direction
         if (not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D"):
             options = ["l", "r", "u", "d"]
-            options.remove(mineDirection)
-            mineDirection = ["l", "r", "u", "d"][random.randint(0, 3)]
+            if (player.getBlock(futureBlockX + 1, futureBlockY)):
+                options.remove("r")
+            if (player.getBlock(futureBlockX - 1, futureBlockY)):
+                options.remove("l")
+            if (player.getBlock(futureBlockX, futureBlockY + 1)):
+                options.remove("d")
+            if (player.getBlock(futureBlockX, futureBlockY - 1)):
+                options.remove("u")
+            if (len(options) > 0):
+                mineDirection = options[random.randint(0, len(options) - 1)]
+            print(len(options))
     print('MINE DIRECTION: ', mineDirection)
     action = " m " + mineDirection
     if (player.isRobot(player.xCoord - 1, player.yCoord)):
