@@ -290,7 +290,7 @@ def funky(read_file_path, tura):
 
 
 def send_command(actions_string, tura):
-    out = open(os.path.join("simulator", "game",
+    out = open(os.path.join("game",
                "c{}_{}.txt".format(my_id, tura)), "a")
     out.write(actions_string)
     out.close()
@@ -315,11 +315,11 @@ if __name__ == "__main__":
             print("Error: Invalid number")
 
     # wait for game to start
-    while not os.path.isfile(os.path.join("simulator", "game", "s{}_{}.txt".format(my_id, 0))):
+    while not os.path.isfile(os.path.join("game", "s{}_{}.txt".format(my_id, 0))):
         continue
-    funky(os.path.join("simulator", "game", "s{}_{}.txt".format(my_id, 0)), 0)
+    funky(os.path.join("game", "s{}_{}.txt".format(my_id, 0)), 0)
 
-    path_to_watch = os.path.join("simulator", "game")
+    path_to_watch = os.path.join("game")
     event_handler = MyHandler()
 
     observer = Observer()
