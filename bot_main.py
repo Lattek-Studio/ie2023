@@ -46,7 +46,8 @@ def funky(read_file_path, tura):
             player.setZone(xZone, yZone)
 
     # default variables
-
+    randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0,
+                          1, 1, 1, 2, 2, 3, 4]
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
@@ -102,10 +103,11 @@ def funky(read_file_path, tura):
     #             "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
     #         print("SPIRAL: ", filtered[0][0], filtered[0][1])
     # print(filtered)
+    if (not player.map.count("B")):
+        randomPosibilities = [0, 0, 0, 0, 0, 1, -1]
     print(spiralMemory.spiralData)
     if (len(spiralMemory.spiralData) > 0):
-        randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0,
-                              1, 1, 1, 2, 2, 3, 4]
+
         pointGoalX = spiralMemory.spiralData[0][0] + \
             randomPosibilities[random.randint(0, len(randomPosibilities) - 1)]
         pointGoalY = spiralMemory.spiralData[0][1] + \
