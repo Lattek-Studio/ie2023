@@ -21,5 +21,5 @@ class Path:
             return
         if (not len(self.oldpath) > 0):
             return
-        # if (not self.oldpath[0][0] == self.playerX and not self.oldpath[0][1] == self.playerY):
+        # if (not self.oldpath[0]['x'] == self.playerX and not self.oldpath[0]['y'] == self.playerY):
         self.oldpath.pop(0)

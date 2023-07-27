@@ -27,7 +27,7 @@ def funky(read_file_path, tura):
     grid.setPlayer(player.xCoord, player.yCoord)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pathManager.setPlayerPos(player.xCoord, player.yCoord)
-    pathManager.updateRemove()
+    # pathManager.updateRemove()
 
     # update spiral engine
     spiralMemory.setHome(player.homeX, player.homeY)
@@ -194,6 +194,7 @@ def funky(read_file_path, tura):
     pathManager.setCoords(pointGoalX, pointGoalY)
     if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
         if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
+            pathManager.updateRemove()
             path = pathManager.oldpath
     pathManager.setPath(path)
 
@@ -216,6 +217,7 @@ def funky(read_file_path, tura):
         pathManager.setCoords(pointGoalX, pointGoalY)
         if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
             if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
+                pathManager.updateRemove()
                 path = pathManager.oldpath
         pathManager.setPath(path)
 
