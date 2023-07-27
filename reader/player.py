@@ -91,6 +91,9 @@ class Perseus:
         self.homeX = x
         self.homeY = y
 
+    def getBlock(self, x, y):
+        return self.fullMap[y * self.xSize + x]
+
     def isRobot(self, x, y):
         if (self.fullMap[y*self.xSize+x] == "0"):
             return True

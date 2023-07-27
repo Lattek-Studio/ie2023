@@ -1,5 +1,8 @@
 def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
 
+    x=int(x)
+    y=int(y)
+    offset=int(1.3*width)
     # if x <= lim_x/2 and y <= lim_y/2:
     #     # 1
     #     x += lim_x//6
@@ -20,8 +23,22 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
     #     x -= lim_x//6
     #     y -= lim_y//6
 
-    correction_x = x
-    correction_y = y
+    distance_closest_wall   = min(abs(x-0), abs(x-lim_x),abs(y-0), abs(y-lim_y))
+    if abs(x-0) == distance_closest_wall:
+        print("STANGA")
+        x+=offset
+    elif abs(x-lim_x) == distance_closest_wall:
+        x-=offset
+        print("DREAPTA")
+    elif abs(y-0) == distance_closest_wall:
+        y+=offset
+        print("SUS")
+    elif abs(y-lim_y) == distance_closest_wall:
+        y-=offset
+        print("JOS")
+
+    correction_x = int(x)
+    correction_y = int(y)
     x = 0
     y = 0
     prx = 0
@@ -56,6 +73,7 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
         pry = y
 
     return coord_list
+
 
 """#spiral debug
 

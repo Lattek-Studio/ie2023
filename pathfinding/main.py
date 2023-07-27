@@ -46,7 +46,7 @@ class Grid:
         if (x < 0 or y < 0 or x >= self.xSize or y >= self.ySize):
             return None
         position = y * self.xSize + x
-        map = map[:position] + value[0] + map[position+1:]
+        self.map = self.map[:position] + value[0] + self.map[position+1:]
 
     def isSolid(self, x, y):
 
@@ -54,7 +54,7 @@ class Grid:
 
         if (self.map[self.yCoord*self.xSize+self.xCoord] == 'F'):
             if (item == "F"):
-                return True
+                return False
         # if (item == 'X'):
         #     return True
         # if (item == 'A'):
