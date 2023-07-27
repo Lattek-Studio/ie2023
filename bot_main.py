@@ -104,10 +104,12 @@ def funky(read_file_path, tura):
     # print(filtered)
     print(spiralMemory.spiralData)
     if (len(spiralMemory.spiralData) > 0):
+        randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0,
+                              1, 1, 1, 2, 2, 3, 4]
         pointGoalX = spiralMemory.spiralData[0][0] + \
-            [-1, 0, 0, 0, 1][random.randint(0, 4)]
+            randomPosibilities[random.randint(0, len(randomPosibilities) - 1)]
         pointGoalY = spiralMemory.spiralData[0][1] + \
-            [-1, 0, 0, 0, 1][random.randint(0, 4)]
+            randomPosibilities[random.randint(0, len(randomPosibilities) - 1)]
         positionSource = "SPIRAL"
         print(
             "BLOCK: ", player.fullMap[spiralMemory.spiralData[0][1] * player.xSize + spiralMemory.spiralData[0][0]])
