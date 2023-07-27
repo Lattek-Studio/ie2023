@@ -1,6 +1,8 @@
-**/simulator/game
-**/simulator/resources
-**/simulator/example_bot.exe
-**/simulator/simulator.exe
-**/simulator/mars_bot.exe
-**/simulator/imgui.ini
+simulator/game
+simulator/resources
+simulator/example_bot.exe
+simulator/simulator.exe
+simulator/mars_bot.exe
+simulator/imgui.ini
+pathfinding\__pycache__
+reader\__pycache__
