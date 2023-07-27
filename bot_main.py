@@ -19,7 +19,7 @@ def funky(read_file_path, tura):
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
-
+    positionSource = "NONE"
     # update zone
 
     if (player.map.count("F")):
@@ -36,6 +36,7 @@ def funky(read_file_path, tura):
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
+    positionSource = "first middle"
     # spiral magic
     spiral = get_spiral_traj(6, 6, player.homeX, player.homeY)
     if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
@@ -58,6 +59,7 @@ def funky(read_file_path, tura):
         if (len(filtered) > 0):
             pointGoalX = filtered[0][0]
             pointGoalY = filtered[0][1]
+            positionSource = "SPIRAL"
             print(
                 "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
             print(
@@ -95,12 +97,15 @@ def funky(read_file_path, tura):
                 minOre = distance
                 pointGoalX = oreX
                 pointGoalY = oreY
+                positionSource = "ORE"
 
         print(indexes_dict)
     buy = ""
     if (player.iron > 0 and player.osmium > 0 and not player.battery):
         pointGoalX = player.homeX
         pointGoalY = player.homeY
+        positionSource = "HOME BUY BATTERY"
+
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
     if (player.health < 5 and player.osmium):
@@ -130,6 +135,7 @@ def funky(read_file_path, tura):
     elif (len(path) == 1 or len(path) == 0):
         pointGoalX = player.xSize // 2
         pointGoalY = player.ySize // 2
+        positionSource = "SECOND middle"
         path = grid.AStarPathfinding({
             'startX': player.xCoord,
             'startY': player.yCoord,
@@ -146,6 +152,7 @@ def funky(read_file_path, tura):
     print("COORDS: ", player.xCoord, player.yCoord)
     # player.printFullMap()
     print("GOAL: ", pointGoalX, pointGoalY)
+    print("SURSA: ", positionSource)
     player.printFullMap()
     message = player.goals.executeGoals()
     send_command(message + " m " + message + buy, tura)

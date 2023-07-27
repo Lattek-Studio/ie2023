@@ -50,8 +50,8 @@ class Grid:
         #     return True
         if (item == 'B'):
             return True
-        if (item == '?'):
-            return True
+        # if (item == '?'):
+        #     return True
         if (item == 'F'):
             return True
 
