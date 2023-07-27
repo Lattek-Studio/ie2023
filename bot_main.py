@@ -46,7 +46,7 @@ def funky(read_file_path, tura):
             player.setZone(xZone, yZone)
 
     # default variables
-    randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0,, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                           1, 1, 1, 2, 2, 3, 4]
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
