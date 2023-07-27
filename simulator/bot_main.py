@@ -63,7 +63,7 @@ def funky(read_file_path, tura):
 
     middleX = player.xSize // 2
     middleY = player.ySize // 2
-    randomDistance = random.randint(1, 6)
+    randomDistance = random.randint(0, 1)
     if (player.getBlock(middleX, middleY) == '?'):
         xOffset = middleX - player.xCoord
         yOffset = middleY - player.yCoord
