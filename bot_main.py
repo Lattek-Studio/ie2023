@@ -6,10 +6,12 @@ from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
 from pathfinding.spiralmemory import Spiral
+from pathfinding.path import Path
 
 player = Perseus()
 player.goals.addGoal(Goal("goOffset", {"x": -1, "y": 0}))
 grid = Grid("")
+pathManager = Path()
 spiralMemory = Spiral()
 # function triggered by file creation
 
@@ -24,12 +26,15 @@ def funky(read_file_path, tura):
     player.addReading(input)
     grid.setPlayer(player.xCoord, player.yCoord)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
+    pathManager.setPlayerPos(player.xCoord, player.yCoord)
+    pathManager.updateRemove()
 
     # update spiral engine
     spiralMemory.setHome(player.homeX, player.homeY)
     spiralMemory.setSize(player.xSize, player.ySize)
     if (not spiralMemory.generated):
         spiralMemory.createSpiral()
+        pathManager.setPath([])
 
     spiralMemory.addMap(player.fullMap, player.xSize, player.ySize)
 
@@ -186,6 +191,12 @@ def funky(read_file_path, tura):
         'endX': pointGoalX,
         'endY': pointGoalY,
     })
+    pathManager.setCoords(pointGoalX, pointGoalY)
+    if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
+        if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
+            path = pathManager.oldpath
+    pathManager.setPath(path)
+
     print(path)
     if (len(path) >= 2):
         player.goals.removeGoal()
@@ -202,6 +213,12 @@ def funky(read_file_path, tura):
             'endX': pointGoalX,
             'endY': pointGoalY,
         })
+        pathManager.setCoords(pointGoalX, pointGoalY)
+        if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
+            if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
+                path = pathManager.oldpath
+        pathManager.setPath(path)
+
         if (len(path) > 1):
             player.goals.removeGoal()
             print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
@@ -255,6 +272,9 @@ def funky(read_file_path, tura):
     if (player.isRobot(player.xCoord, player.yCoord - 1)):
         action = " a " + "u"
     print("ACTION: ", action)
+
+    print('PATH MANAGER ', pointGoalX, pathManager.oldPosX,
+          pointGoalY, pathManager.oldPosY, pathManager.oldpath)
     send_command(message + action + buy, tura)
     read_input.close()
 
