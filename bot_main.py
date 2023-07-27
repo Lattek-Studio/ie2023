@@ -9,7 +9,7 @@ from pathfinding.spiral import get_spiral_traj
 
 
 player = Perseus()
-# player.goals.addGoal(Goal("goOffset", {"x": 1, "y": 0}))
+player.goals.addGoal(Goal("goOffset", {"x": -1, "y": 0}))
 grid = Grid("")
 # function triggered by file creation
 
@@ -40,7 +40,7 @@ def funky(read_file_path, tura):
     positionSource = "first middle"
     # spiral magic
     spiral = get_spiral_traj(
-        5, 4, player.homeX, player.homeY, player.xSize, player.ySize)
+        6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
     # print(spiral)
     if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
         spiral = []

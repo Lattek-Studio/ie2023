@@ -215,15 +215,6 @@ class Grid:
                         'h': memoryMap[y][x + 1]['h'],
                     }
                 )
-            if (not x == 0):
-                options.append(
-                    {
-                        'x': x - 1,
-                        'y': y,
-                        'sum': memoryMap[y][x - 1]['g'] + memoryMap[y][x - 1]['h'],
-                        'h': memoryMap[y][x - 1]['h'],
-                    }
-                )
             if (not y == self.ySize-1):
                 options.append(
                     {
@@ -233,6 +224,16 @@ class Grid:
                         'h': memoryMap[y + 1][x]['h'],
                     }
                 )
+            if (not x == 0):
+                options.append(
+                    {
+                        'x': x - 1,
+                        'y': y,
+                        'sum': memoryMap[y][x - 1]['g'] + memoryMap[y][x - 1]['h'],
+                        'h': memoryMap[y][x - 1]['h'],
+                    }
+                )
+
             if (not y == 0):
                 options.append(
                     {
