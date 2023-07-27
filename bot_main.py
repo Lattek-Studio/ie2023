@@ -22,17 +22,24 @@ def funky(read_file_path, tura):
 
     # update zone
 
-    if (player.map.count("F") and not player.fullMap.count("F")):
-        index = player.map.index("F")
-        xZone = index % player.xSize
-        yZone = index // player.xSize
-        player.setZone(xZone, yZone)
+    if (player.map.count("F")):
+        indexes_dict = {'F': []}
+
+        for i, char in enumerate(player.map):
+            if char in indexes_dict:
+                indexes_dict[char].append(i)
+        for index in indexes_dict['F']:
+            xZone = index % player.xSize
+            yZone = index // player.xSize
+            player.setZone(xZone, yZone)
 
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
     # spiral magic
-    spiral = get_spiral_traj(4, 6, player.homeX, player.homeY)
+    spiral = get_spiral_traj(6, 6, player.homeX, player.homeY)
+    if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
+        spiral = []
     filtered = []
     # remove spiral point that are ? in player.fullMap
     if (not player.fullMap == ""):
@@ -41,6 +48,10 @@ def funky(read_file_path, tura):
             if point[0] < 0 or point[0] >= player.xSize or point[1] < 0 or point[1] >= player.ySize:
                 spiral.remove(point)
             elif not player.fullMap[point[1] * player.xSize + point[0]] == '?':
+                spiral.remove(point)
+            elif player.fullMap[point[1] * player.xSize + point[0]] == 'B':
+                spiral.remove(point)
+            elif player.fullMap[point[1] * player.xSize + point[0]] == 'F':
                 spiral.remove(point)
             else:
                 filtered.append(point)
@@ -101,9 +112,9 @@ def funky(read_file_path, tura):
 
     # pointGoalX = player.xSize // 2
     # pointGoalY = player.ySize // 2
-    if (player.fullMap.count("F")):
-        pointGoalX = player.xSize // 2
-        pointGoalY = player.ySize // 2
+    # if (player.fullMap.count("F")):
+    #     pointGoalX = player.xSize // 2
+    #     pointGoalY = player.ySize // 2
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
@@ -116,10 +127,26 @@ def funky(read_file_path, tura):
         print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
                              "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
+    elif (len(path) == 1 or len(path) == 0):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
+        path = grid.AStarPathfinding({
+            'startX': player.xCoord,
+            'startY': player.yCoord,
+            'endX': pointGoalX,
+            'endY': pointGoalY,
+        })
+        if (len(path) > 1):
+            player.goals.removeGoal()
+            print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
+            player.goals.addGoal(Goal("goOffset", {
+                "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
+
     print("TURA", tura)
     print("COORDS: ", player.xCoord, player.yCoord)
     # player.printFullMap()
-
+    print("GOAL: ", pointGoalX, pointGoalY)
+    player.printFullMap()
     message = player.goals.executeGoals()
     send_command(message + " m " + message + buy, tura)
     read_input.close()
