@@ -103,8 +103,8 @@ def funky(read_file_path, tura):
     #             "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
     #         print("SPIRAL: ", filtered[0][0], filtered[0][1])
     # print(filtered)
-    if (not player.map.count("B")):
-        randomPosibilities = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1]
+    if (not player.hasBedrockNearby()):
+        randomPosibilities = [0, 0, 0]
     print(spiralMemory.spiralData)
     if (len(spiralMemory.spiralData) > 0):
 
