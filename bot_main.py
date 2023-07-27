@@ -5,7 +5,6 @@ import os
 from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
-from pathfinding.spiral import get_spiral_traj
 from pathfinding.spiralmemory import Spiral
 
 player = Perseus()
@@ -16,25 +15,28 @@ spiralMemory = Spiral()
 
 
 def funky(read_file_path, tura):
+    # system lines
     read_input = open(read_file_path, "r")
-    player.setTura(tura)
     input = read_input.read()
+
+    # update storage
+    player.setTura(tura)
     player.addReading(input)
     grid.setPlayer(player.xCoord, player.yCoord)
-    positionSource = "NONE"
+    grid.setMap(player.fullMap, player.xSize, player.ySize)
+
+    # update spiral engine
     spiralMemory.setHome(player.homeX, player.homeY)
     spiralMemory.setSize(player.xSize, player.ySize)
-
-    # update zone
-
     if (not spiralMemory.generated):
         spiralMemory.createSpiral()
 
     spiralMemory.addMap(player.fullMap, player.xSize, player.ySize)
 
+    # update zone long term memory
+
     if (player.map.count("F")):
         indexes_dict = {'F': []}
-
         for i, char in enumerate(player.map):
             if char in indexes_dict:
                 indexes_dict[char].append(i)
@@ -43,11 +45,13 @@ def funky(read_file_path, tura):
             yZone = index // player.xSize
             player.setZone(xZone, yZone)
 
-    grid.setMap(player.fullMap, player.xSize, player.ySize)
+    # default variables
+
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
-    # spiral magic
+
+    # old spiral magic
     # spiral = get_spiral_traj(
     #     6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
     # # print(spiral)
