@@ -273,6 +273,10 @@ def funky(read_file_path, tura):
             print(len(options))
     print('MINE DIRECTION: ', mineDirection)
     action = " m " + mineDirection
+
+    # HARD OVERWRITE
+    action = " m " + message
+
     if (player.isRobot(player.xCoord - 1, player.yCoord)):
         action = " a " + "l"
     if (player.isRobot(player.xCoord + 1, player.yCoord)):
@@ -281,6 +285,7 @@ def funky(read_file_path, tura):
         action = " a " + "d"
     if (player.isRobot(player.xCoord, player.yCoord - 1)):
         action = " a " + "u"
+
     print("ACTION: ", action)
 
     print('PATH MANAGER ', pointGoalX, pathManager.oldPosX,

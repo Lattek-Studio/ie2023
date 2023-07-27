@@ -55,6 +55,9 @@ class Grid:
         if (self.map[self.yCoord*self.xSize+self.xCoord] == 'F'):
             if (item == "F"):
                 return False
+            if (self.get(x-1, y) == 'F' or self.get(x, y-1) == 'F' or self.get(x+1, y) == 'F' or self.get(x, y+1) == 'F'):
+                return False
+
         # if (item == 'X'):
         #     return True
         # if (item == 'A'):
@@ -257,7 +260,7 @@ class Grid:
             'x': startX,
             'y': startY,
         })
-        for i in range(0, 20):
+        for i in range(0, 40):
 
             check(bestPath[-1]['x'], bestPath[-1]['y'])
             matches = findBestNextCheck(bestPath[-1]['x'], bestPath[-1]['y'])
