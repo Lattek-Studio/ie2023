@@ -10,14 +10,14 @@ class Goal:
         self.target = target
 
     def getDirectionLetter(self):
-        if (self.goal.type == "goOffset"):
-            if (self.goal.target["x"] > 0):
+        if (self.type == "goOffset"):
+            if (self.target["x"] > 0):
                 return "r"
-            if (self.goal.target["x"] < 0):
+            if (self.target["x"] < 0):
                 return "l"
-            if (self.goal.target["y"] > 0):
+            if (self.target["y"] > 0):
                 return "d"
-            if (self.goal.target["y"] < 0):
+            if (self.target["y"] < 0):
                 return "u"
         return False
 

@@ -191,20 +191,20 @@ def funky(read_file_path, tura):
     message = player.goals.executeGoals()
     # prediction mining
     mineDirection = message
-    if(len(path) >= 3)
+    if (len(path) >= 3):
         futureRobotX = path[1]['x']
         futureRobotY = path[1]['y']
         futureBlockX = path[2]['x']
         futureBlockY = path[2]['y']
-        futureBlock = player.fullMap[futureBlockY * player.xSize + futureBlockX]
-        
-        
+        futureBlock = player.fullMap[futureBlockY *
+                                     player.xSize + futureBlockX]
+
         futureGoal = Goal("goOffset", {
             "x": path[2]['x'] - path[1]['x'], "y": path[2]['y'] - path[1]['y']})
         direction = futureGoal.getDirectionLetter()
-        if( not direction == False):
+        if (not direction == False):
             mineDirection = direction
-        if(not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D" ):
+        if (not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D"):
             options = ["l", "r", "u", "d"]
             options.remove(mineDirection)
             mineDirection = ["l", "r", "u", "d"][random.randint(0, 3)]
