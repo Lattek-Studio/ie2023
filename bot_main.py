@@ -200,7 +200,7 @@ def funky(read_file_path, tura):
                                      player.xSize + futureBlockX]
 
         futureGoal = Goal("goOffset", {
-            "x": path[2]['x'] - path[1]['x'], "y": path[2]['y'] - path[1]['y']})
+            "x": path[1]['x'] - path[2]['x'], "y": path[1]['y'] - path[2]['y']})
         direction = futureGoal.getDirectionLetter()
         if (not direction == False):
             mineDirection = direction
@@ -208,7 +208,7 @@ def funky(read_file_path, tura):
             options = ["l", "r", "u", "d"]
             options.remove(mineDirection)
             mineDirection = ["l", "r", "u", "d"][random.randint(0, 3)]
-
+    print('MINE DIRECTION: ', mineDirection)
     action = " m " + mineDirection
     if (player.isRobot(player.xCoord - 1, player.yCoord)):
         action = " a " + "l"
