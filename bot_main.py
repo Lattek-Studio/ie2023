@@ -161,7 +161,16 @@ def funky(read_file_path, tura):
     print("SURSA: ", positionSource)
     player.printFullMap()
     message = player.goals.executeGoals()
-    send_command(message + " m " + message + buy, tura)
+    action = " m " + message
+    if (player.isRobot(player.xCoord - 1, player.yCoord)):
+        action = " a " + "l"
+    if (player.isRobot(player.xCoord + 1, player.yCoord)):
+        action = " a " + "r"
+    if (player.isRobot(player.xCoord, player.yCoord + 1)):
+        action = " a " + "d"
+    if (player.isRobot(player.xCoord, player.yCoord - 1)):
+        action = " a " + "u"
+    send_command(message + action + buy, tura)
     read_input.close()
 
 

@@ -89,6 +89,19 @@ class Perseus:
         self.homeX = x
         self.homeY = y
 
+    def isRobot(self, x, y):
+        if (self.fullMap[y*self.xSize+x] == "0"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "1"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "2"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "3"):
+            return True
+        if (self.fullMap[y*self.xSize+x] == "4"):
+            return True
+        return False
+
     def setZone(self, x, y):
         zone_width = min(abs(x-0), abs(x-self.xSize),
                          abs(y-0), abs(y-self.ySize))
