@@ -56,3 +56,29 @@ def get_spiral_traj(width, spirals, x, y, lim_x, lim_y):
         pry = y
 
     return coord_list
+
+"""#spiral debug
+
+import matplotlib.pyplot as plt
+
+# List of coordinates
+coordinates = get_spiral_traj(4,6,0,0,0,0)
+
+# Separate the x and y coordinates into separate lists
+x_values, y_values = zip(*coordinates)
+
+# Create a scatter plot
+plt.scatter(x_values, y_values, color='blue')
+
+# Set plot title and labels
+plt.title('Coordinates on a 2D Grid')
+plt.xlabel('X-axis')
+plt.ylabel('Y-axis')
+
+# Set plot limits
+plt.xlim(-35, 35)
+plt.ylim(-35, 35)
+
+# Show the plot
+plt.grid(True)
+plt.show()"""
