@@ -181,32 +181,44 @@ class Grid:
                 expand(x + 1, y)
 
         def findBestNextCheck(x, y):
-            options = [
-                {
-                    'x': x,
-                    'y': y - 1,
-                    'sum': memoryMap[y - 1][x]['g'] + memoryMap[y - 1][x]['h'],
-                    'h': memoryMap[y - 1][x]['h'],
-                },
-                {
-                    'x': x,
-                    'y': y + 1,
-                    'sum': memoryMap[y + 1][x]['g'] + memoryMap[y + 1][x]['h'],
-                    'h': memoryMap[y + 1][x]['h'],
-                },
-                {
-                    'x': x - 1,
-                    'y': y,
-                    'sum': memoryMap[y][x - 1]['g'] + memoryMap[y][x - 1]['h'],
-                    'h': memoryMap[y][x - 1]['h'],
-                },
-                {
-                    'x': x + 1,
-                    'y': y,
-                    'sum': memoryMap[y][x + 1]['g'] + memoryMap[y][x + 1]['h'],
-                    'h': memoryMap[y][x + 1]['h'],
-                }
-            ]
+            options = []
+            if (not x == self.xSize-1):
+                options.append(
+                    {
+                        'x': x + 1,
+                        'y': y,
+                        'sum': memoryMap[y][x + 1]['g'] + memoryMap[y][x + 1]['h'],
+                        'h': memoryMap[y][x + 1]['h'],
+                    }
+                )
+            if (not x == 0):
+                options.append(
+                    {
+                        'x': x - 1,
+                        'y': y,
+                        'sum': memoryMap[y][x - 1]['g'] + memoryMap[y][x - 1]['h'],
+                        'h': memoryMap[y][x - 1]['h'],
+                    }
+                )
+            if (not y == self.ySize-1):
+                options.append(
+                    {
+                        'x': x,
+                        'y': y + 1,
+                        'sum': memoryMap[y + 1][x]['g'] + memoryMap[y + 1][x]['h'],
+                        'h': memoryMap[y + 1][x]['h'],
+                    }
+                )
+            if (not y == 0):
+                options.append(
+                    {
+                        'x': x,
+                        'y': y - 1,
+                        'sum': memoryMap[y - 1][x]['g'] + memoryMap[y - 1][x]['h'],
+                        'h': memoryMap[y - 1][x]['h'],
+                    }
+                )
+
             filtered_options = [
                 option for option in options if exists(option['x'], option['y'])]
 

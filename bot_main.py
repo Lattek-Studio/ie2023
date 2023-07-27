@@ -38,7 +38,9 @@ def funky(read_file_path, tura):
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
     # spiral magic
-    spiral = get_spiral_traj(6, 6, player.homeX, player.homeY)
+    spiral = get_spiral_traj(
+        6, 6, player.homeX, player.homeY, player.xSize, player.ySize)
+    # print(spiral)
     if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
         spiral = []
     filtered = []
@@ -120,6 +122,10 @@ def funky(read_file_path, tura):
     # if (player.fullMap.count("F")):
     #     pointGoalX = player.xSize // 2
     #     pointGoalY = player.ySize // 2
+    if (player.fullMap[player.yCoord * player.xSize + player.xCoord] == 'F'):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
+        positionSource = "middle IM IN ZONE"
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
