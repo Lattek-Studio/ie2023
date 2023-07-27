@@ -1,7 +1,7 @@
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import os
-
+import random
 from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
@@ -189,7 +189,25 @@ def funky(read_file_path, tura):
     print("SURSA: ", positionSource)
     player.printFullMap()
     message = player.goals.executeGoals()
-    action = " m " + message
+    # prediction mining
+    mineDirection = message
+    if(len(path) >= 3)
+        futureRobotX = path[1]['x']
+        futureRobotY = path[1]['y']
+        futureBlockX = path[2]['x']
+        futureBlockY = path[2]['y']
+        futureBlock = player.fullMap[futureBlockY * player.xSize + futureBlockX]
+        
+        
+        futureGoal = Goal("goOffset", {
+            "x": path[2]['x'] - path[1]['x'], "y": path[2]['y'] - path[1]['y']})
+        direction = futureGoal.getDirectionLetter()
+        if( not direction == False):
+            mineDirection = direction
+        if(futureBlock == "X" or futureBlock == "A" or futureBlock == "C" or futureBlock == "D" ):
+            mineDirection = ["l", "r", "u", "d"][random.randint(0, 3)]
+
+    action = " m " + mineDirection
     if (player.isRobot(player.xCoord - 1, player.yCoord)):
         action = " a " + "l"
     if (player.isRobot(player.xCoord + 1, player.yCoord)):
