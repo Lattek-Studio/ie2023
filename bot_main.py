@@ -6,10 +6,12 @@ from reader.player import Perseus
 from reader.goals import Goal
 from pathfinding.main import Grid
 from pathfinding.spiralmemory import Spiral
+from pathfinding.path import Path
 
 player = Perseus()
 player.goals.addGoal(Goal("goOffset", {"x": -1, "y": 0}))
 grid = Grid("")
+pathManager = Path()
 spiralMemory = Spiral()
 # function triggered by file creation
 
@@ -24,12 +26,16 @@ def funky(read_file_path, tura):
     player.addReading(input)
     grid.setPlayer(player.xCoord, player.yCoord)
     grid.setMap(player.fullMap, player.xSize, player.ySize)
+    pathManager.setPlayerPos(player.xCoord, player.yCoord)
+
+    # pathManager.updateRemove()
 
     # update spiral engine
     spiralMemory.setHome(player.homeX, player.homeY)
     spiralMemory.setSize(player.xSize, player.ySize)
     if (not spiralMemory.generated):
         spiralMemory.createSpiral()
+        pathManager.setPath([])
 
     spiralMemory.addMap(player.fullMap, player.xSize, player.ySize)
 
@@ -46,10 +52,32 @@ def funky(read_file_path, tura):
             player.setZone(xZone, yZone)
 
     # default variables
-
+    randomPosibilities = [-4, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                          1, 1, 1, 2, 2, 3, 4]
+    randomPosibilities = [0, 0, 0]
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
+
+    # get middle direction optimized path
+
+    middleX = player.xSize // 2
+    middleY = player.ySize // 2
+    randomDistance = random.randint(1, 6)
+    if (player.getBlock(middleX, middleY) == '?'):
+        xOffset = middleX - player.xCoord
+        yOffset = middleY - player.yCoord
+        if (xOffset > 0):
+            xOffset = 1
+        elif (xOffset < 0):
+            xOffset = -1
+        if (yOffset > 0):
+            yOffset = 1
+        elif (yOffset < 0):
+            yOffset = -1
+        pointGoalX = player.xCoord + xOffset * randomDistance
+        pointGoalY = player.yCoord + yOffset * randomDistance
+    positionSource = "random middle"
 
     # old spiral magic
     # spiral = get_spiral_traj(
@@ -82,10 +110,15 @@ def funky(read_file_path, tura):
     #             "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
     #         print("SPIRAL: ", filtered[0][0], filtered[0][1])
     # print(filtered)
+    if (not player.hasBedrockNearby()):
+        randomPosibilities = [0, 0, 0]
     print(spiralMemory.spiralData)
     if (len(spiralMemory.spiralData) > 0):
-        pointGoalX = spiralMemory.spiralData[0][0]
-        pointGoalY = spiralMemory.spiralData[0][1]
+
+        pointGoalX = spiralMemory.spiralData[0][0] + \
+            randomPosibilities[random.randint(0, len(randomPosibilities) - 1)]
+        pointGoalY = spiralMemory.spiralData[0][1] + \
+            randomPosibilities[random.randint(0, len(randomPosibilities) - 1)]
         positionSource = "SPIRAL"
         print(
             "BLOCK: ", player.fullMap[spiralMemory.spiralData[0][1] * player.xSize + spiralMemory.spiralData[0][0]])
@@ -94,9 +127,9 @@ def funky(read_file_path, tura):
         print("SPIRAL: ",
               spiralMemory.spiralData[0][0], spiralMemory.spiralData[0][1])
 
-    if (player.fullMap.count("C") or player.fullMap.count("D")):
+    if (player.map.count("C") or player.map.count("D")):
         # find ore coords
-        map = player.fullMap
+        map = player.map
         indexes_dict = {'C': [], 'D': []}
 
         for i, char in enumerate(map):
@@ -135,6 +168,8 @@ def funky(read_file_path, tura):
 
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
+    if (player.iron >= 3 and player.battery == 1):
+        buy = " b a"
     if (player.health < 5 and player.osmium):
         buy = " b h"
     if (player.health < 10 and player.battery and player.osmium):
@@ -154,12 +189,22 @@ def funky(read_file_path, tura):
         pointGoalX = player.xSize // 2
         pointGoalY = player.ySize // 2
         positionSource = "middle IM IN ZONE"
+
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
         'endX': pointGoalX,
         'endY': pointGoalY,
     })
+    if (player.hasLavaNearby()):
+        pathManager.setPath(path)
+    pathManager.setCoords(pointGoalX, pointGoalY)
+    if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
+        if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
+            pathManager.updateRemove()
+            path = pathManager.oldpath
+    pathManager.setPath(path)
+
     print(path)
     if (len(path) >= 2):
         player.goals.removeGoal()
@@ -176,6 +221,13 @@ def funky(read_file_path, tura):
             'endX': pointGoalX,
             'endY': pointGoalY,
         })
+        pathManager.setCoords(pointGoalX, pointGoalY)
+        if (pathManager.oldPosX == pointGoalX and pathManager.oldPosY == pointGoalY):
+            if (len(pathManager.oldpath) > 0 and pathManager.oldPosX > 0 and pathManager.oldPosY > 0):
+                pathManager.updateRemove()
+                path = pathManager.oldpath
+        pathManager.setPath(path)
+
         if (len(path) > 1):
             player.goals.removeGoal()
             print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
@@ -192,28 +244,29 @@ def funky(read_file_path, tura):
     # prediction mining
     print('PATH LENGTH IN FUTURE: ', len(path))
     mineDirection = message
-    if (len(path) >= 3):
-        futureRobotX = path[1]['x']
-        futureRobotY = path[1]['y']
-        futureBlockX = path[2]['x']
-        futureBlockY = path[2]['y']
+    if (len(path) >= 2):
+        futureRobotX = path[0]['x']
+        futureRobotY = path[0]['y']
+        futureBlockX = path[1]['x']
+        futureBlockY = path[1]['y']
         futureBlock = player.getBlock(futureBlockX, futureBlockY)
 
         futureGoal = Goal("goOffset", {
-            "x": path[2]['x'] - path[1]['x'], "y": path[2]['y'] - path[1]['y']})
+            "x": path[1]['x'] - path[0]['x'], "y": path[1]['y'] - path[0]['y']})
         direction = futureGoal.getDirectionLetter()
         print("direction letter: ", direction)
         if (not direction == False):
             mineDirection = direction
         if (not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D"):
             options = ["l", "r", "u", "d"]
-            if (player.getBlock(futureBlockX + 1, futureBlockY)):
+            cantMine = ["B", ".", "0", "1", "2", "3", "4"]
+            if (cantMine.count(player.getBlock(futureBlockX + 1, futureBlockY))):
                 options.remove("r")
-            if (player.getBlock(futureBlockX - 1, futureBlockY)):
+            if (cantMine.count(player.getBlock(futureBlockX - 1, futureBlockY))):
                 options.remove("l")
-            if (player.getBlock(futureBlockX, futureBlockY + 1)):
+            if (cantMine.count(player.getBlock(futureBlockX, futureBlockY + 1))):
                 options.remove("d")
-            if (player.getBlock(futureBlockX, futureBlockY - 1)):
+            if (cantMine.count(player.getBlock(futureBlockX, futureBlockY - 1))):
                 options.remove("u")
             if (len(options) > 0):
                 mineDirection = options[random.randint(0, len(options) - 1)]
@@ -229,6 +282,9 @@ def funky(read_file_path, tura):
     if (player.isRobot(player.xCoord, player.yCoord - 1)):
         action = " a " + "u"
     print("ACTION: ", action)
+
+    print('PATH MANAGER ', pointGoalX, pathManager.oldPosX,
+          pointGoalY, pathManager.oldPosY, pathManager.oldpath)
     send_command(message + action + buy, tura)
     read_input.close()
 

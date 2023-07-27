@@ -107,6 +107,44 @@ class Perseus:
             return True
         return False
 
+    def hasBedrockNearby(self):
+        if (self.getBlock(self.xCoord+1, self.yCoord) == "B"):
+            return True
+        if (self.getBlock(self.xCoord-1, self.yCoord) == "B"):
+            return True
+        if (self.getBlock(self.xCoord, self.yCoord+1) == "B"):
+            return True
+        if (self.getBlock(self.xCoord, self.yCoord-1) == "B"):
+            return True
+        # if (self.getBlock(self.xCoord+1, self.yCoord+1) == "B"):
+        #     return True
+        # if (self.getBlock(self.xCoord-1, self.yCoord-1) == "B"):
+        #     return True
+        # if (self.getBlock(self.xCoord+1, self.yCoord-1) == "B"):
+        #     return True
+        # if (self.getBlock(self.xCoord-1, self.yCoord+1) == "B"):
+        #     return True
+        return False
+
+    def hasLavaNearby(self):
+        if (self.getBlock(self.xCoord+1, self.yCoord) == "B"):
+            return True
+        if (self.getBlock(self.xCoord-1, self.yCoord) == "B"):
+            return True
+        if (self.getBlock(self.xCoord, self.yCoord+1) == "B"):
+            return True
+        if (self.getBlock(self.xCoord, self.yCoord-1) == "B"):
+            return True
+        if (self.getBlock(self.xCoord+1, self.yCoord+1) == "F"):
+            return True
+        if (self.getBlock(self.xCoord-1, self.yCoord-1) == "F"):
+            return True
+        if (self.getBlock(self.xCoord+1, self.yCoord-1) == "F"):
+            return True
+        if (self.getBlock(self.xCoord-1, self.yCoord+1) == "F"):
+            return True
+        return False
+
     def setZone(self, x, y):
         zone_width = min(abs(x-0), abs(x-self.xSize),
                          abs(y-0), abs(y-self.ySize))
