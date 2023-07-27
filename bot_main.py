@@ -114,9 +114,9 @@ def funky(read_file_path, tura):
         print("SPIRAL: ",
               spiralMemory.spiralData[0][0], spiralMemory.spiralData[0][1])
 
-    if (player.fullMap.count("C") or player.fullMap.count("D")):
+    if (player.map.count("C") or player.map.count("D")):
         # find ore coords
-        map = player.fullMap
+        map = player.map
         indexes_dict = {'C': [], 'D': []}
 
         for i, char in enumerate(map):
