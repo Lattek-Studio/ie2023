@@ -10,6 +10,8 @@ class Perseus:
     homeY = ""
     xCoord = ""
     yCoord = ""
+    xSize = 0
+    ySize = 0
     goals = GoalSystem()
 
     def generateUnknown(self):

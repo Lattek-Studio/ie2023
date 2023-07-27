@@ -1,6 +1,8 @@
 class Grid:
     xSize = 15
     ySize = 15
+    xCoord = 0
+    yCoord = 0
     map = """
         000000000000000
         000000000000000
@@ -24,6 +26,10 @@ class Grid:
         if (map != None):
             self.setMap(map, xSize, ySize)
 
+    def setPlayer(self, x, y):
+        self.xCoord = x
+        self.yCoord = y
+
     def setMap(self,  map, xSize=15, ySize=15):
         if (map == None):
             return
@@ -43,7 +49,12 @@ class Grid:
         map = map[:position] + value[0] + map[position+1:]
 
     def isSolid(self, x, y):
+
         item = self.get(x, y)
+
+        if (self.map[self.yCoord*self.xSize+self.xCoord] == 'F'):
+            if (item == "F"):
+                return True
         # if (item == 'X'):
         #     return True
         # if (item == 'A'):
@@ -57,6 +68,19 @@ class Grid:
 
         if (self.get(x-1, y) == 'F' or self.get(x, y-1) == 'F' or self.get(x+1, y) == 'F' or self.get(x, y+1) == 'F'):
             return True
+
+        # if (item == "0" or item == "1" or item == "2" or item == "3" or item == "4"):
+        #     return True
+        # if (self.get(x-1, y) == '0' or self.get(x, y-1) == '0' or self.get(x+1, y) == '0' or self.get(x, y+1) == '0'):
+        #     return True
+        # if (self.get(x-1, y) == '1' or self.get(x, y-1) == '1' or self.get(x+1, y) == '1' or self.get(x, y+1) == '1'):
+        #     return True
+        # if (self.get(x-1, y) == '2' or self.get(x, y-1) == '2' or self.get(x+1, y) == '2' or self.get(x, y+1) == '2'):
+        #     return True
+        # if (self.get(x-1, y) == '3' or self.get(x, y-1) == '3' or self.get(x+1, y) == '3' or self.get(x, y+1) == '3'):
+        #     return True
+        # if (self.get(x-1, y) == '4' or self.get(x, y-1) == '4' or self.get(x+1, y) == '4' or self.get(x, y+1) == '4'):
+        #     return True
 
         return False
 
@@ -232,7 +256,7 @@ class Grid:
             'x': startX,
             'y': startY,
         })
-        for i in range(0, 500):
+        for i in range(0, 100):
 
             check(bestPath[-1]['x'], bestPath[-1]['y'])
             matches = findBestNextCheck(bestPath[-1]['x'], bestPath[-1]['y'])

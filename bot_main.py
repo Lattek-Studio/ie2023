@@ -9,7 +9,7 @@ from pathfinding.spiral import get_spiral_traj
 
 
 player = Perseus()
-player.goals.addGoal(Goal("goOffset", {"x": -1, "y": 0}))
+# player.goals.addGoal(Goal("goOffset", {"x": 1, "y": 0}))
 grid = Grid("")
 # function triggered by file creation
 
@@ -19,6 +19,7 @@ def funky(read_file_path, tura):
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
+    grid.setPlayer(player.xCoord, player.yCoord)
     positionSource = "NONE"
     # update zone
 
@@ -39,7 +40,7 @@ def funky(read_file_path, tura):
     positionSource = "first middle"
     # spiral magic
     spiral = get_spiral_traj(
-        6, 6, player.homeX, player.homeY, player.xSize, player.ySize)
+        5, 4, player.homeX, player.homeY, player.xSize, player.ySize)
     # print(spiral)
     if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
         spiral = []
@@ -132,8 +133,8 @@ def funky(read_file_path, tura):
         'endX': pointGoalX,
         'endY': pointGoalY,
     })
-
-    if (len(path) > 1):
+    print(path)
+    if (len(path) >= 1):
         player.goals.removeGoal()
         print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
@@ -170,6 +171,7 @@ def funky(read_file_path, tura):
         action = " a " + "d"
     if (player.isRobot(player.xCoord, player.yCoord - 1)):
         action = " a " + "u"
+    print("ACTION: ", action)
     send_command(message + action + buy, tura)
     read_input.close()
 
