@@ -90,10 +90,28 @@ class Perseus:
         self.homeY = y
 
     def setZone(self, x, y):
+        zone_width = min(abs(x-0),abs(x-self.xSize),abs(y-0),abs(y-self.ySize))
+        def setblocked(x, y):
+            self.fullMap[y*self.xSize+x] = "F"
+
+        for x in range(0,zone_width):
+            for y in range(0,self.ySize):
+                setblocked(x,y)
+        for x in range(zone_width,self.xSize):
+            for y in range(self.ySize-zone_width,self.ySize):
+                setblocked(x,y)
+        for x in range(self.xSize-zone_width,self.xSize):
+            for y in range(0,self.ySize-zone_width):
+                setblocked(x,y)
+        for x in range(zone_width,self.xSize-zone_width):
+            for y in range(0,zone_width):
+                setblocked(x,y)
+
+        """self.fullMap
         ring = 0
         if (x > self.xSize // 2):
             ring = 2 * self.xSize - x
             return
         else:
-            ring = x
+            ring = x"""
         # fill ring
