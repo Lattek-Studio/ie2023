@@ -51,6 +51,26 @@ def funky(read_file_path, tura):
     pointGoalY = player.ySize // 2
     positionSource = "first middle"
 
+    # get middle direction optimized path
+
+    middleX = player.xSize // 2
+    middleY = player.ySize // 2
+    randomDistance = random.randint(1, 6)
+    if (player.getBlock(middleX, middleY) == '?'):
+        xOffset = middleX - player.xCoord
+        yOffset = middleY - player.yCoord
+        if (xOffset > 0):
+            xOffset = 1
+        elif (xOffset < 0):
+            xOffset = -1
+        if (yOffset > 0):
+            yOffset = 1
+        elif (yOffset < 0):
+            yOffset = -1
+        pointGoalX = player.xCoord + xOffset * randomDistance
+        pointGoalY = player.yCoord + yOffset * randomDistance
+    positionSource = "random middle"
+
     # old spiral magic
     # spiral = get_spiral_traj(
     #     6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
