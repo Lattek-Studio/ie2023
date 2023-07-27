@@ -275,13 +275,11 @@ class Grid:
                 bestPath.pop()
 
             if (len(bestPath) == 0):
-                print("No path found")
                 return []
             if (bestPath[-1]['x'] == endX and bestPath[-1]['y'] == endY):
                 break
 
         # printMemoryMap2()
-        print(bestPath)
         return bestPath
 
 

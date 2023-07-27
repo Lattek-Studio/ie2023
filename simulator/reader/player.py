@@ -69,21 +69,6 @@ class Perseus:
         # update dependency
         self.combineMaps()
 
-    def printFullMap(self):
-        if (self.fullMap == ""):
-            return
-        for y in range(0, self.ySize):
-            for x in range(0, self.xSize):
-                item = self.fullMap[y * self.xSize + x]
-                print(item, end='')
-            print("")
-        if (self.homeX == "" or self.homeY == ""):
-            return
-        print('HOME: ', self.homeX, self.homeY)
-        if (self.xCoord == "" or self.yCoord == ""):
-            return
-        print('COORDS: ', self.xCoord, self.yCoord)
-
     def setTura(self, tura):
         self.tura = tura
 

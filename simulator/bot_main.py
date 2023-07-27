@@ -82,7 +82,6 @@ def funky(read_file_path, tura):
     # old spiral magic
     # spiral = get_spiral_traj(
     #     6, 4, player.homeX, player.homeY, player.xSize, player.ySize)
-    # # print(spiral)
     # if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
     #     spiral = []
     # filtered = []
@@ -104,15 +103,9 @@ def funky(read_file_path, tura):
     #         pointGoalX = filtered[0][0]
     #         pointGoalY = filtered[0][1]
     #         positionSource = "SPIRAL"
-    #         print(
-    #             "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
-    #         print(
-    #             "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
-    #         print("SPIRAL: ", filtered[0][0], filtered[0][1])
-    # print(filtered)
+
     if (not player.hasBedrockNearby()):
         randomPosibilities = [0, 0, 0]
-    print(spiralMemory.spiralData)
     if (len(spiralMemory.spiralData) > 0):
 
         pointGoalX = spiralMemory.spiralData[0][0] + \
@@ -120,12 +113,6 @@ def funky(read_file_path, tura):
         pointGoalY = spiralMemory.spiralData[0][1] + \
             randomPosibilities[random.randint(0, len(randomPosibilities) - 1)]
         positionSource = "SPIRAL"
-        print(
-            "BLOCK: ", player.fullMap[spiralMemory.spiralData[0][1] * player.xSize + spiralMemory.spiralData[0][0]])
-        print(
-            "BLOCK PLAYER: ", player.fullMap[player.yCoord * player.xSize + player.xCoord])
-        print("SPIRAL: ",
-              spiralMemory.spiralData[0][0], spiralMemory.spiralData[0][1])
 
     if (player.map.count("C") or player.map.count("D")):
         # find ore coords
@@ -159,7 +146,6 @@ def funky(read_file_path, tura):
                 pointGoalY = oreY
                 positionSource = "ORE"
 
-        print(indexes_dict)
     buy = ""
     if (player.iron > 0 and player.osmium > 0 and not player.battery):
         pointGoalX = player.homeX
@@ -205,10 +191,8 @@ def funky(read_file_path, tura):
             path = pathManager.oldpath
     pathManager.setPath(path)
 
-    print(path)
     if (len(path) >= 2):
         player.goals.removeGoal()
-        print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
                              "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
     elif (len(path) == 1 or len(path) == 0):
@@ -230,19 +214,12 @@ def funky(read_file_path, tura):
 
         if (len(path) > 1):
             player.goals.removeGoal()
-            print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
             player.goals.addGoal(Goal("goOffset", {
                 "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
 
-    print("TURA", tura)
-    print("COORDS: ", player.xCoord, player.yCoord)
-    # player.printFullMap()
-    print("GOAL: ", pointGoalX, pointGoalY)
-    print("SURSA: ", positionSource)
-    player.printFullMap()
     message = player.goals.executeGoals()
     # prediction mining
-    print('PATH LENGTH IN FUTURE: ', len(path))
+
     mineDirection = message
     if (len(path) >= 2):
         futureRobotX = path[0]['x']
@@ -254,7 +231,6 @@ def funky(read_file_path, tura):
         futureGoal = Goal("goOffset", {
             "x": path[1]['x'] - path[0]['x'], "y": path[1]['y'] - path[0]['y']})
         direction = futureGoal.getDirectionLetter()
-        print("direction letter: ", direction)
         if (not direction == False):
             mineDirection = direction
         if (not futureBlock == "X" or not futureBlock == "A" or not futureBlock == "C" or not futureBlock == "D"):
@@ -270,8 +246,6 @@ def funky(read_file_path, tura):
                 options.remove("u")
             if (len(options) > 0):
                 mineDirection = options[random.randint(0, len(options) - 1)]
-            print(len(options))
-    print('MINE DIRECTION: ', mineDirection)
     action = " m " + mineDirection
     if (player.isRobot(player.xCoord - 1, player.yCoord)):
         action = " a " + "l"
@@ -281,10 +255,6 @@ def funky(read_file_path, tura):
         action = " a " + "d"
     if (player.isRobot(player.xCoord, player.yCoord - 1)):
         action = " a " + "u"
-    print("ACTION: ", action)
-
-    print('PATH MANAGER ', pointGoalX, pathManager.oldPosX,
-          pointGoalY, pathManager.oldPosY, pathManager.oldpath)
     send_command(message + action + buy, tura)
     read_input.close()
 

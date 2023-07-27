@@ -52,7 +52,6 @@ class Spiral:
                 self.spiralData.pop(0)
 
     def createSpiral(self):
-        print("ADD SPIRAL>>>>>>>>>>>>>>>")
         self.spiralData = get_spiral_traj(
             5, 7, self.homeX, self.homeY, self.xSize, self.ySize)
 
