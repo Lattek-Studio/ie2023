@@ -186,8 +186,8 @@ def funky(read_file_path, tura):
         pointGoalX = player.xSize // 2
         pointGoalY = player.ySize // 2
     if (player.fullMap[player.yCoord * player.xSize + player.xCoord] == 'F'):
-        pointGoalX = player.xSize // 2
-        pointGoalY = player.ySize // 2
+        pointGoalX = player.xSize // 2 + [-1, 0, 1][random.randint(0, 2)]
+        pointGoalY = player.ySize // 2 + [-1, 0, 1][random.randint(0, 2)]
         positionSource = "middle IM IN ZONE"
 
     path = grid.AStarPathfinding({
