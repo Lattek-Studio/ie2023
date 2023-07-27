@@ -9,6 +9,18 @@ class Goal:
         self.type = type
         self.target = target
 
+    def getDirectionLetter(self):
+        if (self.type == "goOffset"):
+            if (self.target["x"] > 0):
+                return "r"
+            if (self.target["x"] < 0):
+                return "l"
+            if (self.target["y"] > 0):
+                return "d"
+            if (self.target["y"] < 0):
+                return "u"
+        return False
+
 
 class GoalSystem:
     goals = []
