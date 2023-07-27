@@ -19,20 +19,28 @@ def funky(read_file_path, tura):
     player.setTura(tura)
     input = read_input.read()
     player.addReading(input)
-
+    positionSource = "NONE"
     # update zone
 
-    if (player.map.count("F") and not player.fullMap.count("F")):
-        index = player.map.index("F")
-        xZone = index % player.xSize
-        yZone = index // player.xSize
-        player.setZone(xZone, yZone)
+    if (player.map.count("F")):
+        indexes_dict = {'F': []}
+
+        for i, char in enumerate(player.map):
+            if char in indexes_dict:
+                indexes_dict[char].append(i)
+        for index in indexes_dict['F']:
+            xZone = index % player.xSize
+            yZone = index // player.xSize
+            player.setZone(xZone, yZone)
 
     grid.setMap(player.fullMap, player.xSize, player.ySize)
     pointGoalX = player.xSize // 2
     pointGoalY = player.ySize // 2
+    positionSource = "first middle"
     # spiral magic
-    spiral = get_spiral_traj(4, 6, player.homeX, player.homeY)
+    spiral = get_spiral_traj(6, 6, player.homeX, player.homeY)
+    if (player.fullMap[player.homeY * player.xSize + player.homeX] == 'F'):
+        spiral = []
     filtered = []
     # remove spiral point that are ? in player.fullMap
     if (not player.fullMap == ""):
@@ -42,11 +50,16 @@ def funky(read_file_path, tura):
                 spiral.remove(point)
             elif not player.fullMap[point[1] * player.xSize + point[0]] == '?':
                 spiral.remove(point)
+            elif player.fullMap[point[1] * player.xSize + point[0]] == 'B':
+                spiral.remove(point)
+            elif player.fullMap[point[1] * player.xSize + point[0]] == 'F':
+                spiral.remove(point)
             else:
                 filtered.append(point)
         if (len(filtered) > 0):
             pointGoalX = filtered[0][0]
             pointGoalY = filtered[0][1]
+            positionSource = "SPIRAL"
             print(
                 "BLOCK: ", player.fullMap[filtered[0][1] * player.xSize + filtered[0][0]])
             print(
@@ -84,12 +97,15 @@ def funky(read_file_path, tura):
                 minOre = distance
                 pointGoalX = oreX
                 pointGoalY = oreY
+                positionSource = "ORE"
 
         print(indexes_dict)
     buy = ""
     if (player.iron > 0 and player.osmium > 0 and not player.battery):
         pointGoalX = player.homeX
         pointGoalY = player.homeY
+        positionSource = "HOME BUY BATTERY"
+
         if (abs(player.xCoord - pointGoalX) <= 1 and abs(player.yCoord - pointGoalY) <= 1):
             buy = " b b"
     if (player.health < 5 and player.osmium):
@@ -101,9 +117,9 @@ def funky(read_file_path, tura):
 
     # pointGoalX = player.xSize // 2
     # pointGoalY = player.ySize // 2
-    if (player.fullMap.count("F")):
-        pointGoalX = player.xSize // 2
-        pointGoalY = player.ySize // 2
+    # if (player.fullMap.count("F")):
+    #     pointGoalX = player.xSize // 2
+    #     pointGoalY = player.ySize // 2
     path = grid.AStarPathfinding({
         'startX': player.xCoord,
         'startY': player.yCoord,
@@ -116,10 +132,28 @@ def funky(read_file_path, tura):
         print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
         player.goals.addGoal(Goal("goOffset", {
                              "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
+    elif (len(path) == 1 or len(path) == 0):
+        pointGoalX = player.xSize // 2
+        pointGoalY = player.ySize // 2
+        positionSource = "SECOND middle"
+        path = grid.AStarPathfinding({
+            'startX': player.xCoord,
+            'startY': player.yCoord,
+            'endX': pointGoalX,
+            'endY': pointGoalY,
+        })
+        if (len(path) > 1):
+            player.goals.removeGoal()
+            print(path[1]['x'] - player.xCoord, path[1]['y'] - player.yCoord)
+            player.goals.addGoal(Goal("goOffset", {
+                "x": path[1]['x'] - player.xCoord, "y": path[1]['y'] - player.yCoord}))
+
     print("TURA", tura)
     print("COORDS: ", player.xCoord, player.yCoord)
     # player.printFullMap()
-
+    print("GOAL: ", pointGoalX, pointGoalY)
+    print("SURSA: ", positionSource)
+    player.printFullMap()
     message = player.goals.executeGoals()
     send_command(message + " m " + message + buy, tura)
     read_input.close()

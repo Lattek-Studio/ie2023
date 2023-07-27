@@ -50,8 +50,8 @@ class Grid:
         #     return True
         if (item == 'B'):
             return True
-        if (item == '?'):
-            return True
+        # if (item == '?'):
+        #     return True
         if (item == 'F'):
             return True
 
@@ -220,7 +220,7 @@ class Grid:
             'x': startX,
             'y': startY,
         })
-        for i in range(0, 1000):
+        for i in range(0, 2000):
 
             check(bestPath[-1]['x'], bestPath[-1]['y'])
             matches = findBestNextCheck(bestPath[-1]['x'], bestPath[-1]['y'])
