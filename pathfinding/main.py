@@ -257,7 +257,7 @@ class Grid:
             'x': startX,
             'y': startY,
         })
-        for i in range(0, 100):
+        for i in range(0, 500):
 
             check(bestPath[-1]['x'], bestPath[-1]['y'])
             matches = findBestNextCheck(bestPath[-1]['x'], bestPath[-1]['y'])
